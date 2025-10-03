@@ -1,0 +1,68 @@
+<div class="card mt-4" id="recommendations">
+    <div class="card-body">
+        <h2 class="h4 mb-4">Рекомендації</h2>
+
+        {% with recommendations.similar as similar %}
+            {% if similar %}
+                <div class="mb-4">
+                    <h3 class="h5 mb-3">Схожі вподобання</h3>
+                    <div class="row g-3">
+                        {% for person in similar %}
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="recommendation-card h-100 d-flex align-items-center gap-3 p-3 border rounded">
+                                    <img src="{{ person.avatar|default:'/media/avatars/default/default_avatar_light.png' }}" alt="{{ person.name }}" class="rounded-circle recommendation-avatar">
+                                    <div>
+                                        <p class="mb-1 fw-semibold">{{ person.name }}</p>
+                                        {% if person.age %}
+                                            <p class="mb-1 text-muted">{{ person.age }} років</p>
+                                        {% endif %}
+                                        <p class="mb-0 small text-muted">
+                                            {{ person.city }}{% if person.city and person.country %}, {% endif %}{{ person.country }}
+                                        </p>
+                                        <a class="stretched-link" href="/members/profile/{{ person.username }}">
+                                            <span class="visually-hidden">Показати профіль {{ person.name }}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% with recommendations.top_liked as top_liked %}
+            {% if top_liked %}
+                <div>
+                    <h3 class="h5 mb-3">Найбільш вподобані</h3>
+                    <div class="row g-3">
+                        {% for person in top_liked %}
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="recommendation-card h-100 d-flex align-items-center gap-3 p-3 border rounded">
+                                    <img src="{{ person.avatar|default:'/media/avatars/default/default_avatar_light.png' }}" alt="{{ person.name }}" class="rounded-circle recommendation-avatar">
+                                    <div>
+                                        <p class="mb-1 fw-semibold">{{ person.name }}</p>
+                                        {% if person.age %}
+                                            <p class="mb-1 text-muted">{{ person.age }} років</p>
+                                        {% endif %}
+                                        <p class="mb-1 small text-muted">
+                                            {{ person.city }}{% if person.city and person.country %}, {% endif %}{{ person.country }}
+                                        </p>
+                                        <p class="mb-0 small text-muted">Вподобали: {{ person.followers_count }}</p>
+                                        <a class="stretched-link" href="/members/profile/{{ person.username }}">
+                                            <span class="visually-hidden">Показати профіль {{ person.name }}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% if not recommendations.similar and not recommendations.top_liked %}
+            <p class="mb-0 text-muted">Наразі немає рекомендацій. Спробуйте пізніше!</p>
+        {% endif %}
+    </div>
+</div>

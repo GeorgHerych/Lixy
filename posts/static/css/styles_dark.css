@@ -661,3 +661,20 @@ p.member-followers-title {
         border-radius: 0 !important;
     }
 }
+.recommendation-card {
+    position: relative;
+    background-color: #1f212a;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
+}
+
+.recommendation-avatar {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+}

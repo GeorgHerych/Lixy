@@ -45,9 +45,9 @@
                         <p class="card-text member-bio">{{ member.bio }}</p>
                     {% endif %}
 
-                    <div class="member-details-extras-short-info d-flex">
+                    <div class="member-details-extras-short-info d-flex flex-wrap gap-3">
                         {% if member.country %}
-                            <p class="card-text text-member-details-extras">
+                            <p class="card-text text-member-details-extras mb-0">
                                 <i class="icon-secondary bi bi-geo-alt-fill"></i>
                                 {% if member.city %}
                                     {{ member.city }},
@@ -56,21 +56,31 @@
                             </p>
                         {% endif %}
 
-                        {% if member.birthdate %}
-                            <p class="card-text text-member-details-extras"><i class="icon-secondary bi bi-calendar-fill"></i> {{ member.birthdate }}</p>
+                        {% if member_age %}
+                            <p class="card-text text-member-details-extras mb-0">
+                                <i class="icon-secondary bi bi-cake-fill"></i>
+                                {{ member_age }} років
+                            </p>
                         {% endif %}
 
-                        {% if member.gender == "M" %}
-                            <p class="card-text text-member-details-extras"><i class="icon-secondary bi bi-gender-male"></i> Male</p>
-                        {% else %}
-                            <p class="card-text text-member-details-extras"><i class="icon-secondary bi bi-gender-female"></i> Female</p>
+                        {% if member.gender %}
+                            <p class="card-text text-member-details-extras mb-0">
+                                <i class="icon-secondary bi bi-gender-ambiguous"></i>
+                                {% if member.gender == 'M' %}
+                                    Чоловік
+                                {% elif member.gender == 'F' %}
+                                    Жінка
+                                {% else %}
+                                    {{ member.get_gender_display }}
+                                {% endif %}
+                            </p>
                         {% endif %}
                     </div>
                 </div>
 
                 <div class="member-connections">
-                    <p class="member-followers-title">Followers: {{ member.followers.count }}</p>
-                    <p class="member-following-title">Followings: {{ member.followings.count }}</p>
+                    <p class="member-followers-title">Підписники: {{ member.followers.count }}</p>
+                    <p class="member-following-title">Підписки: {{ member.followings.count }}</p>
                 </div>
             </div>
         </div>

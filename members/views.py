@@ -6,14 +6,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.db.models import Count
 
 from members.forms import RegisterUserForm, LoginUserForm, ResetPasswordForm, EditMemberForm
 from members.models import Member, Country, City
-from posts.helpers.localtimemanager import set_local_time_to_models
 from posts.helpers.passwordvalidator import is_password_valid
 from posts.helpers.prevpagesession import set_prev_page
-from posts.models import HiddenPost, SavedPost
-from posts.views import create_post
 
 
 # Create your views here.
@@ -101,22 +99,63 @@ def reset_password(request):
 @login_required(login_url="/members/login")
 def profile(request, username):
     set_prev_page(request.session, f"/members/profile/{username}")
-    user = request.user
     member = Member.objects.get(username=username)
-    posts = member.posts.all()
+    member_age = _calculate_age(member.birthdate)
 
-    form = create_post(request, f"/members/profile/{username}/")
+    similar_members_qs = Member.objects.exclude(id=member.id)
 
-    ordered_posts = posts.order_by('-pub_date')
-    set_local_time_to_models(ordered_posts, 'pub_date')
+    if member.country_id:
+        similar_members_qs = similar_members_qs.filter(country=member.country)
 
-    saved_post_list = SavedPost.objects.filter(member=user)
-    saved_post_ids = saved_post_list.values_list('post__id', flat=True)
+    if member.city_id:
+        similar_members_qs = similar_members_qs.filter(city=member.city)
 
-    hidden_post_list = HiddenPost.objects.filter(member=user)
-    hidden_posts_ids = hidden_post_list.values_list('post__id', flat=True)
+    if member.gender:
+        similar_members_qs = similar_members_qs.filter(gender=member.gender)
 
-    return render(request, 'profile/profile.html', {'member': member, 'posts': ordered_posts, 'saved_post_ids': saved_post_ids, 'hidden_post_ids': hidden_posts_ids, 'form': form})
+    similar_members = []
+
+    for similar_member in similar_members_qs.select_related('country', 'city')[:5]:
+        similar_members.append({
+            'username': similar_member.username,
+            'name': similar_member.get_full_name() or similar_member.username,
+            'age': _calculate_age(similar_member.birthdate),
+            'city': similar_member.city.name if similar_member.city else "",
+            'country': similar_member.country.name if similar_member.country else "",
+            'avatar': similar_member.avatar.url if similar_member.avatar else "",
+            'gender_display': similar_member.get_gender_display() if similar_member.gender else None,
+        })
+
+    top_liked_members = []
+
+    top_liked_qs = (
+        Member.objects.exclude(id=member.id)
+        .annotate(followers_count=Count('followers'))
+        .order_by('-followers_count', 'username')
+    )
+
+    for liked_member in top_liked_qs.select_related('country', 'city')[:5]:
+        top_liked_members.append({
+            'username': liked_member.username,
+            'name': liked_member.get_full_name() or liked_member.username,
+            'age': _calculate_age(liked_member.birthdate),
+            'city': liked_member.city.name if liked_member.city else "",
+            'country': liked_member.country.name if liked_member.country else "",
+            'avatar': liked_member.avatar.url if liked_member.avatar else "",
+            'gender_display': liked_member.get_gender_display() if liked_member.gender else None,
+            'followers_count': liked_member.followers_count,
+        })
+
+    context = {
+        'member': member,
+        'member_age': member_age,
+        'recommendations': {
+            'similar': similar_members,
+            'top_liked': top_liked_members,
+        },
+    }
+
+    return render(request, 'profile/profile.html', context)
 
 
 def _calculate_age(birthdate):
@@ -137,7 +176,6 @@ def discover(request):
     set_prev_page(request.session, "/members/discover/")
 
     members = Member.objects.exclude(id=request.user.id).select_related('country', 'city')
-    countries = Country.objects.order_by('name')
 
     member_cards = []
 
@@ -161,9 +199,6 @@ def discover(request):
 
     context = {
         'members_data': member_cards,
-        'countries': countries,
-        'default_min_age': 18,
-        'default_max_age': 80,
     }
 
     return render(request, 'profile/discover.html', context)
