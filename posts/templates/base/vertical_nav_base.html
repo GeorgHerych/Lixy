@@ -24,11 +24,37 @@
 
     <ul class="navbar-nav nav-bottom">
         {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="/members/profile/{{ user.username }}">
-                    <i class="bi bi-person-fill"></i>
-                    <p class="nav-title">Профіль</p>
+            <li class="nav-item nav-item-settings">
+                <a class="nav-link nav-link-static" href="/members/profile/{{ user.username }}#settings">
+                    <i class="bi bi-gear-fill"></i>
+                    <p class="nav-title">Налаштування</p>
                 </a>
+                <ul class="settings-submenu">
+                    <li>
+                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#notifications">
+                            <i class="bi bi-bell-fill"></i>
+                            <span>Сповіщення</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#privacy">
+                            <i class="bi bi-shield-lock-fill"></i>
+                            <span>Конфіденційність</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#rules">
+                            <i class="bi bi-journal-check"></i>
+                            <span>Правила</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#subscriptions">
+                            <i class="bi bi-repeat"></i>
+                            <span>Налаштування підписок</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/members/logout">

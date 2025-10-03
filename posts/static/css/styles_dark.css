@@ -113,6 +113,38 @@ body {
                 border-color .15s ease-in-out;
 }
 
+.nav-item-settings {
+    margin-bottom: 16px;
+}
+
+.settings-submenu {
+    list-style: none;
+    padding-left: 44px;
+    margin: 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-sublink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.nav-sublink:hover,
+.nav-sublink:focus {
+    color: var(--secondary-text-color);
+}
+
+.nav-sublink i {
+    font-size: 18px;
+    color: currentColor;
+}
+
 .navbar-brand:focus,
 .nav-link:focus {
     color: var(--secondary-text-color);
