@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -11,7 +13,7 @@ from posts.helpers.localtimemanager import set_local_time_to_models
 from posts.helpers.passwordvalidator import is_password_valid
 from posts.helpers.prevpagesession import set_prev_page
 from posts.models import HiddenPost, SavedPost
-from posts.views import create_post, saved_posts
+from posts.views import create_post
 
 
 # Create your views here.
@@ -115,6 +117,57 @@ def profile(request, username):
     hidden_posts_ids = hidden_post_list.values_list('post__id', flat=True)
 
     return render(request, 'profile/profile.html', {'member': member, 'posts': ordered_posts, 'saved_post_ids': saved_post_ids, 'hidden_post_ids': hidden_posts_ids, 'form': form})
+
+
+def _calculate_age(birthdate):
+    if not birthdate:
+        return None
+
+    today = date.today()
+    years = today.year - birthdate.year
+
+    if (today.month, today.day) >= (birthdate.month, birthdate.day):
+        return years
+
+    return years - 1
+
+
+@login_required(login_url="/members/login")
+def discover(request):
+    set_prev_page(request.session, "/members/discover/")
+
+    members = Member.objects.exclude(id=request.user.id).select_related('country', 'city')
+    countries = Country.objects.order_by('name')
+
+    member_cards = []
+
+    for member in members:
+        age = _calculate_age(member.birthdate)
+
+        member_cards.append({
+            'username': member.username,
+            'name': member.get_full_name() or member.username,
+            'gender': member.gender,
+            'gender_display': member.get_gender_display() if member.gender else None,
+            'age': age,
+            'bio': member.bio or "",
+            'city': member.city.name if member.city else "",
+            'city_id': member.city.id if member.city else None,
+            'country': member.country.name if member.country else "",
+            'country_id': member.country.id if member.country else None,
+            'avatar': member.avatar.url if member.avatar else "",
+            'banner': member.banner.url if member.banner else "",
+        })
+
+    context = {
+        'members_data': member_cards,
+        'countries': countries,
+        'default_min_age': 18,
+        'default_max_age': 80,
+    }
+
+    return render(request, 'profile/discover.html', context)
+
 
 @login_required(login_url="/members/login")
 def edit_profile(request, username):
