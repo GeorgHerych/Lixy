@@ -3,18 +3,9 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-    <div class="profile-info mt-3">
-        {% include 'profile/profile_card.html' %}
+    <div class="profile-page py-4">
+        {% include 'profile/profile_card.html' with member_age=member_age %}
 
-        {% if user.is_authenticated and user.username == member.username %}
-            {% include 'posts/create_post_form.html' %}
-        {% endif %}
-
-        {% include 'posts/post_cards.html' %}
+        {% include 'profile/recommendations.html' with recommendations=recommendations %}
     </div>
-{% endblock %}
-
-{% block scripts %}
-    <script src="/static/js/carousels.js"></script>
-    <script src="/static/js/action_menu.js"></script>
 {% endblock %}

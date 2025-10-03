@@ -5,15 +5,15 @@
                 <div class="collapse navbar-collapse d-flex justify-content-start" id="navbarNavDropdown">
                     <ul class="navbar-nav auth-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/">Home</a>
+                            <a class="nav-link" aria-current="page" href="/members/discover/">Знайомства</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/members/register">Register</a>
+                            <a class="nav-link" href="/members/register">Зареєструватися</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/members/login">Login</a>
+                            <a class="nav-link" href="/members/login">Увійти</a>
                         </li>
                     </ul>
                 </div>
@@ -23,16 +23,13 @@
                 <div class="navbar-collapse nav-posts">
                     <ul class="navbar-nav nav-block">
                         <li class="nav-item">
-                            <a class="nav-link nav-top-link" aria-current="page" href="/">World</a>
+                            <a class="nav-link nav-top-link" aria-current="page" href="/members/discover/">Знайомства</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link nav-top-link" aria-current="page" href="/following">Following</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link nav-top-link" aria-current="page" href="/members/discover/">Discover</a>
-                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link nav-top-link" aria-current="page" href="/members/profile/{{ user.username }}">Профіль</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             {% endif %}

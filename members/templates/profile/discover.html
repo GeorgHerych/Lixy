@@ -11,52 +11,14 @@
 <div class="discover-page py-4">
     <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
         <div>
-            <h1 class="discover-title mb-2">Знайомства поряд</h1>
-            <p class="text-muted mb-0">Swipe-відчуття як у Badoo чи Tinder: вправо — подобається, вліво — пропустити. Оберіть, кого шукаєте, і знайдіть свою іскру.</p>
+            <h1 class="discover-title mb-2">Свайпайте та знайомтеся</h1>
+            <p class="text-muted mb-0">Вправо — подобається, вліво — пропустити. Лише ви і картки з людьми поруч.</p>
         </div>
         <div class="result-counter text-lg-end">
             <span class="result-counter__number" data-results-count>{{ members_data|length }}</span>
             <span class="result-counter__label">кандидатів</span>
         </div>
     </div>
-
-    <form class="discover-filters card shadow-sm mt-4" data-filter-form>
-        <div class="card-body">
-            <div class="row g-3 align-items-end">
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold" for="looking-for">Я шукаю</label>
-                    <select class="form-select" id="looking-for" data-looking-for>
-                        <option value="any">Усіх</option>
-                        <option value="female">Дівчат</option>
-                        <option value="male">Хлопців</option>
-                    </select>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold" for="country-select">Країна</label>
-                    <select class="form-select" id="country-select" data-country>
-                        <option value="">Уся країна</option>
-                        {% for country in countries %}
-                            <option value="{{ country.id }}">{{ country.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold" for="city-select">Місто</label>
-                    <select class="form-select" id="city-select" data-city disabled>
-                        <option value="">Усі міста</option>
-                    </select>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-semibold" for="min-age">Мінімальний вік</label>
-                    <input type="number" class="form-control" id="min-age" min="18" max="99" step="1" data-min-age value="{{ default_min_age }}">
-                </div>
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-semibold" for="max-age">Максимальний вік</label>
-                    <input type="number" class="form-control" id="max-age" min="18" max="99" step="1" data-max-age value="{{ default_max_age }}">
-                </div>
-            </div>
-        </div>
-    </form>
 
     <div class="swipe-area mt-4">
         <div class="swipe-feedback" data-action-feedback role="status" aria-live="polite"></div>
@@ -65,11 +27,11 @@
                 <div class="empty-state__inner">
                     <i class="bi bi-emoji-smile"></i>
                     <h2>Поки що нікого поблизу</h2>
-                    <p class="mb-0">Оновіть фільтри або поверніться пізніше — хтось особливий точно з’явиться.</p>
+                    <p class="mb-0">Загляньте пізніше — хтось особливий точно з’явиться.</p>
                 </div>
             </div>
             <noscript>
-                <div class="alert alert-info mt-3">Для свайпів та фільтрів увімкніть JavaScript у браузері.</div>
+                <div class="alert alert-info mt-3">Для свайпів увімкніть JavaScript у браузері.</div>
             </noscript>
         </div>
 

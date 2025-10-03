@@ -466,3 +466,20 @@ p.member-followers-title {
 .container {
     padding-top: 40px;
 }
+.recommendation-card {
+    position: relative;
+    background-color: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.recommendation-avatar {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+}
