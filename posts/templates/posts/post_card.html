@@ -1,0 +1,61 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="{{ post.member.avatar.url }}" class="rounded-circle post-avatar" width="100" height="100">
+
+                <div class="post-member-details">
+                    <a href="members/profile/{{ post.member.username }}" class="post-member-name">
+                        {{ post.member.first_name }} {{ post.member.last_name }}
+
+                        {% if post.member.is_verified %}
+                            <i class="bi bi-patch-check-fill"></i>
+                        {% endif %}
+                    </a>
+                    <a href="members/profile/{{ post.member.username }}" class="post-member-nickname">@{{ post.member.username }}</a>
+                </div>
+            </div>
+
+            <div class="post-actions">
+                <button id="more-actions" class="btn"><i class="bi bi-three-dots"></i></button>
+
+                <div class="actions-block hidden">
+                    {% if user.is_authenticated and user.id == post.member_id %}
+                        <a href="/posts/delete-post/{{ post.id }}" class="btn btn-actions"><i class="bi bi-trash-fill"></i> Delete Post</a>
+                        <a href="/posts/edit-post/{{ post.id }}" class="btn btn-actions"><i class="bi bi-pencil-fill"></i> Edit Post</a>
+                    {% else %}
+                        {% if post.id not in saved_post_ids %}
+                            <a href="/posts/hide-post/{{ post.id }}" class="btn btn-actions"><i class="bi bi-file-x-fill"></i> Hide Post</a>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if post.id in saved_post_ids %}
+                        <a href="/posts/unsave-post/{{ post.id }}" class="btn btn-actions"><i class="bi bi-bookmark-x-fill"></i> Unsave Post</a>
+                    {% else %}
+                        <a href="/posts/save-post/{{ post.id }}" class="btn btn-actions"><i class="bi bi-bookmark-fill"></i> Save Post</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        {% if post.attachments.exists %}
+            {% if post.attachments.count == 1 %}
+                {% include 'posts/post_attachment.html' with attachment=post.attachments.first to_delete=False post=form.instance %}
+            {% else %}
+                {% include 'posts/post_attachments.html' with post=post to_delete=False %}
+            {% endif %}
+        {% endif %}
+
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.content }}</p>
+        <p class="card-text pub-date"><small class="text-body-secondary">{{ post.pub_date }}</small></p>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between">
+<!--                            <button class="btn"><i class="bi bi-hand-thumbs-up-fill"></i> Like</button>-->
+<!--                            <button class="btn"><i class="bi bi-hand-thumbs-down-fill"></i> Dislike</button>-->
+        <a class="post-comments-a" href="/post/{{post.id}}/comments"><i class="bi bi-chat-fill"></i> {{ post.comments.count }} Comments</a>
+    </div>
+</div>

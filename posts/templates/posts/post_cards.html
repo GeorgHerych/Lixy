@@ -1,0 +1,19 @@
+<div class="posts">
+    {% if posts|length != 0 %}
+        {% for post in posts %}
+            {% if post.id not in hidden_post_ids %}
+                {% if is_saved %}
+                    {% include 'posts/post_card.html' with post=post.post %}
+                {% else %}
+                    {% include 'posts/post_card.html' %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% if is_saved %}
+            <h2>Save posts to see them later</h2>
+        {% else %}
+            <h2>There is no any posts yet</h2>
+        {% endif %}
+    {% endif %}
+</div>

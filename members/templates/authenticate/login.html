@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block nav %}
+    {% include 'base/nav_base.html' with to_show=True  %}
+{% endblock %}
+
+{% block vertical_nav %}{% endblock %}
+
+{% block content %}
+    <div id="stars"></div>
+
+    <div class="card auth-form" style="width: 24rem;">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Login</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="mb-3">
+                    <a href="/members/reset-password">Forgot Password?</a>
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+
+                <div class="mb-3">
+                    <p>
+                        Don't have an account?
+                        <a href="/members/register">Register</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block scripts %}
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+    <script src="/static/js/stars.js"></script>
+{% endblock %}

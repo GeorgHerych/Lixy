@@ -1,0 +1,770 @@
+[
+    {
+        "model": "members.city",
+        "pk": 1,
+        "fields": {
+            "name": "Toronto",
+            "country": 1
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 2,
+        "fields": {
+            "name": "Vancouver",
+            "country": 1
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 3,
+        "fields": {
+            "name": "Ottawa",
+            "country": 1
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 4,
+        "fields": {
+            "name": "Montreal",
+            "country": 1
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 5,
+        "fields": {
+            "name": "New York",
+            "country": 2
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 6,
+        "fields": {
+            "name": "Los Angeles",
+            "country": 2
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 7,
+        "fields": {
+            "name": "Chicago",
+            "country": 2
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 8,
+        "fields": {
+            "name": "San Francisco",
+            "country": 2
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 9,
+        "fields": {
+            "name": "Mexico City",
+            "country": 3
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 10,
+        "fields": {
+            "name": "Guadalajara",
+            "country": 3
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 11,
+        "fields": {
+            "name": "Monterrey",
+            "country": 3
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 12,
+        "fields": {
+            "name": "Madrid",
+            "country": 6
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 13,
+        "fields": {
+            "name": "Barcelona",
+            "country": 6
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 14,
+        "fields": {
+            "name": "Seville",
+            "country": 6
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 15,
+        "fields": {
+            "name": "Paris",
+            "country": 7
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 16,
+        "fields": {
+            "name": "Lyon",
+            "country": 7
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 17,
+        "fields": {
+            "name": "Marseille",
+            "country": 7
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 18,
+        "fields": {
+            "name": "Brussels",
+            "country": 8
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 19,
+        "fields": {
+            "name": "Antwerp",
+            "country": 8
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 20,
+        "fields": {
+            "name": "Ghent",
+            "country": 8
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 21,
+        "fields": {
+            "name": "Berlin",
+            "country": 10
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 22,
+        "fields": {
+            "name": "Hamburg",
+            "country": 10
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 23,
+        "fields": {
+            "name": "Munich",
+            "country": 10
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 24,
+        "fields": {
+            "name": "Rome",
+            "country": 11
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 25,
+        "fields": {
+            "name": "Milan",
+            "country": 11
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 26,
+        "fields": {
+            "name": "Florence",
+            "country": 11
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 27,
+        "fields": {
+            "name": "Zurich",
+            "country": 12
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 28,
+        "fields": {
+            "name": "Geneva",
+            "country": 12
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 29,
+        "fields": {
+            "name": "Bern",
+            "country": 12
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 30,
+        "fields": {
+            "name": "Copenhagen",
+            "country": 13
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 31,
+        "fields": {
+            "name": "Aarhus",
+            "country": 13
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 32,
+        "fields": {
+            "name": "Odense",
+            "country": 13
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 33,
+        "fields": {
+            "name": "Oslo",
+            "country": 14
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 34,
+        "fields": {
+            "name": "Bergen",
+            "country": 14
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 35,
+        "fields": {
+            "name": "Stavanger",
+            "country": 14
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 36,
+        "fields": {
+            "name": "Stockholm",
+            "country": 15
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 37,
+        "fields": {
+            "name": "Gothenburg",
+            "country": 15
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 38,
+        "fields": {
+            "name": "Malmo",
+            "country": 15
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 39,
+        "fields": {
+            "name": "Helsinki",
+            "country": 16
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 40,
+        "fields": {
+            "name": "Espoo",
+            "country": 16
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 41,
+        "fields": {
+            "name": "Tampere",
+            "country": 16
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 42,
+        "fields": {
+            "name": "Riga",
+            "country": 17
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 43,
+        "fields": {
+            "name": "Jurmala",
+            "country": 17
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 44,
+        "fields": {
+            "name": "Jelgava",
+            "country": 17
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 45,
+        "fields": {
+            "name": "Vilnius",
+            "country": 18
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 46,
+        "fields": {
+            "name": "Kaunas",
+            "country": 18
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 47,
+        "fields": {
+            "name": "Klaipeda",
+            "country": 18
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 48,
+        "fields": {
+            "name": "Tallinn",
+            "country": 19
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 49,
+        "fields": {
+            "name": "Tartu",
+            "country": 19
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 50,
+        "fields": {
+            "name": "Parnu",
+            "country": 19
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 51,
+        "fields": {
+            "name": "Warsaw",
+            "country": 20
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 52,
+        "fields": {
+            "name": "Krakow",
+            "country": 20
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 53,
+        "fields": {
+            "name": "Wroclaw",
+            "country": 20
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 54,
+        "fields": {
+            "name": "Ljubljana",
+            "country": 21
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 55,
+        "fields": {
+            "name": "Maribor",
+            "country": 21
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 56,
+        "fields": {
+            "name": "Celje",
+            "country": 21
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 57,
+        "fields": {
+            "name": "Belgrade",
+            "country": 22
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 58,
+        "fields": {
+            "name": "Novi Sad",
+            "country": 22
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 59,
+        "fields": {
+            "name": "Nis",
+            "country": 22
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 60,
+        "fields": {
+            "name": "Bucharest",
+            "country": 26
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 61,
+        "fields": {
+            "name": "Cluj-Napoca",
+            "country": 26
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 62,
+        "fields": {
+            "name": "Timisoara",
+            "country": 26
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 63,
+        "fields": {
+            "name": "Zagreb",
+            "country": 23
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 64,
+        "fields": {
+            "name": "Split",
+            "country": 23
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 65,
+        "fields": {
+            "name": "Rijeka",
+            "country": 23
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 66,
+        "fields": {
+            "name": "Riverro",
+            "country": 29
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 67,
+        "fields": {
+            "name": "Briyya",
+            "country": 29
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 68,
+        "fields": {
+            "name": "Spai",
+            "country": 29
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 69,
+        "fields": {
+            "name": "Drion",
+            "country": 29
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 70,
+        "fields": {
+            "name": "L'viv",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 71,
+        "fields": {
+            "name": "Bus'k",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 72,
+        "fields": {
+            "name": "Kyiv",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 73,
+        "fields": {
+            "name": "Rivne",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 74,
+        "fields": {
+            "name": "Uzhhorod",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 75,
+        "fields": {
+            "name": "Mukachevo",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 76,
+        "fields": {
+            "name": "Luts'k",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 77,
+        "fields": {
+            "name": "Ternopil'",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 78,
+        "fields": {
+            "name": "Ivano-Frankivs'k",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 79,
+        "fields": {
+            "name": "Chernivtsi",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 80,
+        "fields": {
+            "name": "Zhytomyr",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 81,
+        "fields": {
+            "name": "Vinnytsia",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 82,
+        "fields": {
+            "name": "Odesa",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 83,
+        "fields": {
+            "name": "Mykolaiv",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 84,
+        "fields": {
+            "name": "Dnipro",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 85,
+        "fields": {
+            "name": "Cherkasy",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 86,
+        "fields": {
+            "name": "Chernihiv",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 87,
+        "fields": {
+            "name": "Sumy",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 88,
+        "fields": {
+            "name": "Kharkiv",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 89,
+        "fields": {
+            "name": "Luhans'k",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 90,
+        "fields": {
+            "name": "Donets'k",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 91,
+        "fields": {
+            "name": "Zaporizhzhia",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 92,
+        "fields": {
+            "name": "Kherson",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 93,
+        "fields": {
+            "name": "Sevastopol'",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 94,
+        "fields": {
+            "name": "Khmel'nyts'k",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 95,
+        "fields": {
+            "name": "Kropyvnyts'kyi",
+            "country": 28
+        }
+    },
+    {
+        "model": "members.city",
+        "pk": 69,
+        "fields": {
+            "name": "Poltava",
+            "country": 28
+        }
+    }
+]

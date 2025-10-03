@@ -1,0 +1,30 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="{{ comment.member.avatar.url }}" class="rounded-circle post-avatar" width="100" height="100">
+
+                <div class="post-member-details">
+                    <a href="members/profile/{{ post.member.username }}" class="post-member-name">{{ comment.member.first_name }} {{ comment.member.last_name }}</a>
+                    <a href="members/profile/{{ post.member.username }}" class="post-member-nickname">@{{ comment.member.username }}</a>
+                </div>
+            </div>
+
+            {% if user.is_authenticated and user.id == comment.member_id %}
+                <div class="comment-actions">
+                    <button id="more-actions" class="btn"><i class="bi bi-three-dots"></i></button>
+
+                    <div class="actions-block hidden">
+                        <a href="/post/{{ post.id }}/comments/delete-comment/{{ comment.id }}" class="btn btn-actions"><i class="bi bi-trash-fill"></i> Delete Comment</a>
+                        <a href="/post/{{ post.id }}/comments/edit-comment/{{ comment.id }}" class="btn btn-actions"><i class="bi bi-pencil-fill"></i> Edit Comment</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card-body">
+        <p class="card-text">{{ comment.content }}</p>
+        <p class="card-text pub-date"><small class="text-body-secondary">{{ comment.pub_date }}</small></p>
+    </div>
+</div>

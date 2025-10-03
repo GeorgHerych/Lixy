@@ -1,0 +1,87 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+    <div class="card edit-form" style="width: 24rem;">
+        <div class="card-body">
+            <h3 class="card-title">Edit Profile</h3>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="image-upload-container">
+                    <label for="id_banner" class="preview-banner">
+                        <img id="banner-image" src="{{ form.instance.banner.url }}" alt="Banner Image" class="preview-banner">
+                        <a href="/members/profile/delete-banner/" class="remove-button" onclick="removeBannerImage()"><i class="bi bi-trash-fill"></i></a>
+                    </label>
+
+                    <input type="file" id="id_banner" name="banner" class="form-control hidden" onchange="previewBannerImage(this)">
+                </div>
+
+                <div class="image-upload-container">
+                    <label for="id_avatar" class="preview-avatar">
+                        <img id="avatar-image" src="{{ form.instance.avatar.url }}" alt="Avatar Image" class="preview-avatar">
+                        <a href="/members/profile/delete-avatar/" class="remove-button" onclick="removeAvatarImage()"><i class="bi bi-trash-fill"></i></a>
+                    </label>
+
+                    <input type="file" id="id_avatar" name="avatar" class="form-control hidden" onchange="previewAvatarImage(this)">
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <input placeholder="Username" type="text" name="username" class="form-control" value="{{ form.instance.username }}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <input placeholder="First Name" type="text" name="first_name" class="form-control" value="{{ form.instance.first_name }}">
+                    </div>
+
+                    <div class="col">
+                        <input placeholder="Last Name" type="text" name="last_name" class="form-control" value="{{ form.instance.last_name }}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form.gender }}
+                    </div>
+
+                    <div class="col">
+                        {{ form.birthdate }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        {{ form.country }}
+                    </div>
+
+                    <div class="col">
+                        {{ form.city }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <textarea class="form-control" rows="3" name="bio" placeholder="Tell about yourself" >{% if form.instance.bio != None %}{{ form.instance.bio }}{% endif %}</textarea>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-4 grid-col-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="/members/delete-profile/{{ user.username }}" class="btn btn-danger"><i class="bi bi-trash-fill"></i> Delete Profile</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/get_country_cities.js"></script>
+    <script src="/static/js/image_upload.js"></script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

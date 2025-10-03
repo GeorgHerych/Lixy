@@ -1,0 +1,31 @@
+{% if message.tags == 'debug' %}
+    <div class="alert alert-primary alert-dismissible" role="alert">
+        <i class="bi bi-bug-fill" style="color: #052c65"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% elif message.tags == 'info' %}
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <i class="bi bi-info-circle-fill" style="color: #055160"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% elif message.tags == 'success' %}
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <i class="bi bi-check-circle-fill" style="color: #0a3622"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% elif message.tags == 'warning' %}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <i class="bi bi-exclamation-triangle-fill" style="color: #664d03"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% elif message.tags == 'error' %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <i class="bi bi-exclamation-triangle-fill" style="color: #58151c"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}

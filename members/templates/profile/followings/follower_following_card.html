@@ -1,0 +1,30 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="{{ follower_following.avatar.url }}" class="rounded-circle post-avatar" width="100" height="100">
+
+                <div class="post-member-details">
+                    <a href="/members/profile/{{ follower_following.username }}" class="post-member-name">
+                        {{ follower_following.first_name }} {{ follower_following.last_name }}
+
+                        {% if member.is_verified %}
+                            <i class="bi bi-patch-check-fill"></i>
+                        {% endif %}
+                    </a>
+                    <a href="/members/profile/{{ follower_following.username }}" class="post-member-nickname">@{{ follower_following.username }}</a>
+                </div>
+            </div>
+
+            {% if user.is_authenticated and user.username == member.username %}
+                <div class="following-actions d-flex flex-column justify-content-center">
+                    {% if type == 'followings' %}
+                        <a href="/members/unfollow/{{ follower_following.username }}" class="btn btn-secondary">Unfollow</a>
+                    {% elif type == 'followers' %}
+                        <a href="/members/remove/{{ follower_following.username }}" class="btn btn-secondary">Remove</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

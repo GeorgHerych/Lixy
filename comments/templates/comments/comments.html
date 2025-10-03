@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Comments{% endblock %}
+
+{% block content %}
+    <div class="main-content">
+        {% include 'posts/post_card.html' %}
+
+        {% if user.is_authenticated %}
+            {% include 'comments/create_comment.html' %}
+        {% endif %}
+
+        {% include 'comments/comment_cards.html' %}
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/action_menu.js"></script>
+{% endblock %}

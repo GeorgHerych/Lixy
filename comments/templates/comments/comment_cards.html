@@ -1,0 +1,7 @@
+{% if comments %}
+    {% for comment in comments %}
+        {% include 'comments/comment_card.html' %}
+    {% endfor %}
+{% else %}
+    <p>There's no comments yet.</p>
+{% endif %}

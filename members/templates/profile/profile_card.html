@@ -1,0 +1,78 @@
+<div class="card mb-3">
+    <div class="card-body member-card">
+        <div class="row profile-banner d-flex">
+            {% if member.banner %}
+                <img src="{{ member.banner.url }}" alt="Image Banner" class="card-img-top image-banner"/>
+            {% else %}
+                <img src="/media/bgs/default/default_banner.png" class="image-banner"/>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <img src="{{ member.avatar.url }}" alt="Avatar" class="rounded-circle mr-3 avatar"/>
+
+            <div class="member-details">
+                <div class="member-details-name d-flex justify-content-between">
+                    <div class="member-details-title">
+                        <p class="card-text member-name">
+                            {{ member.first_name }} {{member.last_name}}
+                            {% if member.is_verified %}
+                                <i class="bi bi-patch-check-fill"></i>
+                            {% endif %}
+                        </p>
+                        <p class="card-text member-nickname">@{{ member.username }}</p>
+                    </div>
+
+                    <div class="member-details-actions">
+                        {% if user.is_authenticated and user.username == member.username %}
+                            <a href="/members/profile/edit-profile/{{ member.username }}" class="btn btn-primary">Edit Profile</a>
+                        {% else %}
+                            {% if user.followings %}
+                                {% if member in user.followings.all %}
+                                    <a href="/members/unfollow/{{ member.username }}" class="btn btn-secondary">Unfollow</a>
+                                {% else %}
+                                    <a href="/members/follow/{{ member.username }}" class="btn btn-primary">Follow</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="/members/follow/{{ member.username }}" class="btn btn-primary">Follow</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="member-details-extras mt-1">
+                    {% if member.bio %}
+                        <p class="card-text member-bio">{{ member.bio }}</p>
+                    {% endif %}
+
+                    <div class="member-details-extras-short-info d-flex">
+                        {% if member.country %}
+                            <p class="card-text text-member-details-extras">
+                                <i class="icon-secondary bi bi-geo-alt-fill"></i>
+                                {% if member.city %}
+                                    {{ member.city }},
+                                {% endif %}
+                                {{ member.country }}
+                            </p>
+                        {% endif %}
+
+                        {% if member.birthdate %}
+                            <p class="card-text text-member-details-extras"><i class="icon-secondary bi bi-calendar-fill"></i> {{ member.birthdate }}</p>
+                        {% endif %}
+
+                        {% if member.gender == "M" %}
+                            <p class="card-text text-member-details-extras"><i class="icon-secondary bi bi-gender-male"></i> Male</p>
+                        {% else %}
+                            <p class="card-text text-member-details-extras"><i class="icon-secondary bi bi-gender-female"></i> Female</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="member-connections">
+                    <p class="member-followers-title">Followers: {{ member.followers.count }}</p>
+                    <p class="member-following-title">Followings: {{ member.followings.count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

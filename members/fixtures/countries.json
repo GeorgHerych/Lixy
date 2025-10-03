@@ -1,0 +1,205 @@
+[
+    {
+        "model": "members.country",
+        "pk": 1,
+        "fields": {
+            "name": "Canada"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 2,
+        "fields": {
+            "name": "United States"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 3,
+        "fields": {
+            "name": "Mexico"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 4,
+        "fields": {
+            "name": "United Kingdom"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 5,
+        "fields": {
+            "name": "Portugal"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 6,
+        "fields": {
+            "name": "Spain"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 7,
+        "fields": {
+            "name": "France"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 8,
+        "fields": {
+            "name": "Belgium"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 9,
+        "fields": {
+            "name": "Netherlands"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 10,
+        "fields": {
+            "name": "Germany"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 11,
+        "fields": {
+            "name": "Italy"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 12,
+        "fields": {
+            "name": "Switzerland"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 13,
+        "fields": {
+            "name": "Denmark"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 14,
+        "fields": {
+            "name": "Norway"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 15,
+        "fields": {
+            "name": "Sweden"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 16,
+        "fields": {
+            "name": "Finland"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 17,
+        "fields": {
+            "name": "Latvia"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 18,
+        "fields": {
+            "name": "Lithuania"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 19,
+        "fields": {
+            "name": "Estonia"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 20,
+        "fields": {
+            "name": "Poland"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 21,
+        "fields": {
+            "name": "Slovenia"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 22,
+        "fields": {
+            "name": "Albania"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 23,
+        "fields": {
+            "name": "Croatia"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 24,
+        "fields": {
+            "name": "Hungary"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 25,
+        "fields": {
+            "name": "Slovakia"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 26,
+        "fields": {
+            "name": "Romania"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 27,
+        "fields": {
+            "name": "Serbia"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 28,
+        "fields": {
+            "name": "Ukraine"
+        }
+    },
+    {
+        "model": "members.country",
+        "pk": 29,
+        "fields": {
+            "name": "Kraiton"
+        }
+    }
+]

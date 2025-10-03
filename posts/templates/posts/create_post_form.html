@@ -1,0 +1,51 @@
+<div class="card mb-3">
+    <h2 class="card-title">Create Post</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <input type="text" class="form-control" id="title" placeholder="Title" name="title"/>
+        </div>
+
+        <div class="mb-3">
+            <textarea class="form-control" id="content" name="content" placeholder="Content" rows="3"></textarea>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <div class="attachments">
+                <div class="mb-3">
+                    <label for="images" class="form-label btn btn-secondary attachment">
+                        <i class="bi bi-image-fill" style="color: #eaebf1"></i>
+                    </label>
+                    <input type="file" class="form-control hidden" id="images" name="image" accept="image/*" multiple/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="video" class="form-label btn btn-secondary attachment">
+                        <i class="bi bi-camera-video-fill" style="color: #eaebf1"></i>
+                    </label>
+                    <input type="file" class="form-control hidden" id="video" name="video" accept="video/*" multiple>
+                </div>
+
+                <div class="mb-3">
+                    <label for="poll" class="form-label btn btn-secondary attachment">
+                        <i class="bi bi-bar-chart-fill" style="color: #eaebf1"></i>
+                    </label>
+                    <input type="text" class="form-control hidden" id="poll" name="poll">
+                </div>
+
+                <div class="mb-3">
+                    <label for="location" class="form-label btn btn-secondary attachment">
+                        <i class="bi bi-geo-alt-fill" style="color: #eaebf1"></i>
+                    </label>
+                    <input type="text" class="form-control hidden" id="location" name="location">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary" style="display: block; width: 100%">Post</button>
+            </div>
+        </div>
+    </form>
+</div>

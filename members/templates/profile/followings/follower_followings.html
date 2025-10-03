@@ -1,0 +1,22 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    {% if user.username == member.username %}
+        Your
+    {% else %}
+        {{ member.username }}'s
+    {% endif %}
+    {{ title_text }}
+{% endblock %}
+
+{% block content %}
+    {% if user.username == member.username %}
+        <h1>Your {{ title_text }}</h1>
+    {% else %}
+        <h1>{{ member.username }}'s {{ title_text }}</h1>
+    {% endif %}
+
+    <div class="main-content">
+        {% include 'profile/followings/follower_following_cards.html' %}
+    </div>
+{% endblock %}

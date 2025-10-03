@@ -1,0 +1,21 @@
+{% if attachment.type == 'image' %}
+    {% if "https" in attachment.attachment.url %}
+        <img src="{{ attachment.attachment }}" class="card-img-top post-image" alt="{{ title }}">
+    {% else %}
+        <img src="{{ attachment.attachment.url }}" class="card-img-top post-image" alt="{{ title }}">
+    {% endif %}
+{% elif attachment.type == 'video' %}
+    {% if "https" in attachment.attachment.url %}
+        <video class="card-video video-slide" controls>
+            <source src="{{ attachment.attachment }}">
+        </video>
+    {% else %}
+        <video class="card-video video-slide" controls>
+            <source src="{{ attachment.attachment.url }}">
+        </video>
+    {% endif %}
+{% endif %}
+
+{% if to_delete %}
+    <a href="/posts/{{ post.id }}/delete-attachment/{{ attachment.id }}" class="remove-button"><i class="bi bi-trash-fill"></i></a>
+{% endif %}

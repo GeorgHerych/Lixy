@@ -1,0 +1,102 @@
+[
+    {
+        "model": "posts.Post",
+        "pk": 1,
+        "fields": {
+            "title": "Python Basics for Beginners",
+            "content": "This post covers the foundational knowledge needed to start programming in Python.",
+            "pub_date": "2023-11-01T10:30:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 2,
+        "fields": {
+            "title": "Getting Started with Django",
+            "content": "Learn how to set up your first Django project and why it's the go-to framework for Python web developers.",
+            "pub_date": "2023-10-25T15:00:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 3,
+        "fields": {
+            "title": "10 Tips for Clean Code",
+            "content": "Writing clean code is vital for maintainability and collaboration. These 10 tips will help you improve your coding style.",
+            "pub_date": "2023-10-20T14:00:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 4,
+        "fields": {
+            "title": "Understanding Python Decorators",
+            "content": "A deep dive into how decorators work in Python, with easy-to-follow examples.",
+            "pub_date": "2023-10-15T18:45:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 5,
+        "fields": {
+            "title": "What’s New in Django 5.1?",
+            "content": "An overview of the new features and improvements introduced in Django 5.1.",
+            "pub_date": "2023-10-10T12:00:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 6,
+        "fields": {
+            "title": "Guide to Async Views in Django",
+            "content": "Improve your Django app's performance by using asynchronous views. This post walks you through the basics.",
+            "pub_date": "2023-10-05T09:30:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 7,
+        "fields": {
+            "title": "Deploying Django Apps on Heroku",
+            "content": "A detailed guide to deploying your Django application to Heroku with ease.",
+            "pub_date": "2023-09-30T16:15:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 8,
+        "fields": {
+            "title": "How to Use Bootstrap with Django",
+            "content": "Learn how to integrate the Bootstrap framework with Django to build responsive webpages.",
+            "pub_date": "2023-09-25T11:00:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 9,
+        "fields": {
+            "title": "Handling Media Files in Django",
+            "content": "Manage media files, such as images and videos, effectively in your Django project.",
+            "pub_date": "2023-09-20T17:30:00",
+            "member_id": 1
+        }
+    },
+    {
+        "model": "posts.Post",
+        "pk": 10,
+        "fields": {
+            "title": "Custom Middleware in Django",
+            "content": "Discover how to create and use custom middleware to modify your Django app's request and response cycle.",
+            "pub_date": "2023-09-15T14:00:00",
+            "member_id": 1
+        }
+    }
+]

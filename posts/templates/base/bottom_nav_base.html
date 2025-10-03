@@ -1,0 +1,52 @@
+<div class="bottom-nav">
+    <ul class="navbar-nav nav-flex-row">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/">
+                <i class="bi bi-house-door-fill"></i>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/members/followings/{{ user.username }}">
+                <i class="bi bi-people-fill"></i>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/members/followers/{{ user.username }}">
+                <i class="bi bi-people-fill"></i>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/posts/saved-posts/">
+                <i class="bi bi-bookmark-fill"></i>
+            </a>
+        </li>
+
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="/members/profile/{{ user.username }}">
+                    <i class="bi bi-person-fill"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/members/logout">
+                    <i class="bi bi-person-fill-x"></i>
+                </a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/members/register">
+                    <i class="bi bi-person-add"></i>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/members/login">
+                    <i class="bi bi-person-fill-check"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>

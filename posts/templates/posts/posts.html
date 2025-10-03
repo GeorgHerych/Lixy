@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+    <div class="main-content">
+        {% if user.is_authenticated %}
+            {% include 'posts/create_post_form.html' %}
+        {% endif %}
+
+        {% include 'posts/post_cards.html' %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/carousels.js"></script>
+    <script src="/static/js/action_menu.js"></script>
+{% endblock %}

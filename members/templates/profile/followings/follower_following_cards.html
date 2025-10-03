@@ -1,0 +1,7 @@
+{% if followers_followings %}
+    {% for follower_following in followers_followings %}
+        {% include 'profile/followings/follower_following_card.html' %}
+    {% endfor %}
+{% else %}
+    <h2>You don't have {{ title_text }} yet.</h2>
+{% endif %}

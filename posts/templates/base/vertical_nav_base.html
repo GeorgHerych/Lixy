@@ -1,0 +1,65 @@
+<div class="vertical-nav">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page"  href="/">Lixy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/">
+                <i class="bi bi-house-door-fill"></i>
+                <p class="nav-title">Home</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/members/followings/{{ user.username }}">
+                <i class="bi bi-people-fill"></i>
+                <p class="nav-title">Followings</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/members/followers/{{ user.username }}">
+                <i class="bi bi-people-fill"></i>
+                <p class="nav-title">Followers</p>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/posts/saved-posts/">
+                <i class="bi bi-bookmark-fill"></i>
+                <p class="nav-title">Saved</p>
+            </a>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav nav-bottom">
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="/members/profile/{{ user.username }}">
+                    <i class="bi bi-person-fill"></i>
+                    <p class="nav-title">Profile</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/members/logout">
+                    <i class="bi bi-person-fill-x"></i>
+                    <p class="nav-title">Logout</p>
+                </a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/members/register">
+                    <i class="bi bi-person-add"></i>
+                    <p class="nav-title">Register</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/members/login">
+                    <i class="bi bi-person-fill-check"></i>
+                    <p class="nav-title">Login</p>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>

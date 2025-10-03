@@ -1,0 +1,65 @@
+[
+    {
+        "model": "posts.PostAttachment",
+        "pk": 1,
+        "fields": {
+            "post_id": 1,
+            "attachment": "https://i.ytimg.com/vi/41qgdwd3zAg/hqdefault.jpg",
+            "type": "image"
+        }
+    },
+    {
+        "model": "posts.PostAttachment",
+        "pk": 2,
+        "fields": {
+            "post_id": 2,
+            "attachment": "https://ucarecdn.com/a915a4be-9676-4f70-84cd-76f9183d08f7/-/resize/1050/",
+            "type": "image"
+        }
+    },
+    {
+        "model": "posts.PostAttachment",
+        "pk": 3,
+        "fields": {
+            "post_id": 3,
+            "attachment": "https://elpythonista.com/wp-content/uploads/2020/10/Clean_Code-portada-1024x576.jpg",
+            "type": "image"
+        }
+    },
+    {
+        "model": "posts.PostAttachment",
+        "pk": 4,
+        "fields": {
+            "post_id": 5,
+            "attachment": "https://miro.medium.com/v2/resize:fit:1400/1*smpElKaq0iInax-_sVtzQg.png",
+            "type": "image"
+        }
+    },
+    {
+        "model": "posts.PostAttachment",
+        "pk": 5,
+        "fields": {
+            "post_id": 6,
+            "attachment": "https://testdriven.io/static/images/blog/django/django_async_views.png",
+            "type": "image"
+        }
+    },
+    {
+        "model": "posts.PostAttachment",
+        "pk": 6,
+        "fields": {
+            "post_id": 7,
+            "attachment": "https://i.ytimg.com/vi/DQk3zJlY-eE/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAKlcV9Uyf9c07FqRjnd00JZ3E5Mw",
+            "type": "image"
+        }
+    },
+    {
+        "model": "posts.PostAttachment",
+        "pk": 7,
+        "fields": {
+            "post_id": 9,
+            "attachment": "https://miro.medium.com/v2/resize:fit:1200/1*ZEriGHlNjJe0vkRkfaXDfQ.jpeg",
+            "type": "image"
+        }
+    }
+]
