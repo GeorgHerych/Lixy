@@ -29,6 +29,8 @@
     let activeCard = null;
     let pointerStart = null;
     const defaultAvatar = 'https://placehold.co/96x96?text=L';
+    const defaultCardPhoto = 'https://placehold.co/600x600?text=Lixy';
+    const dragThreshold = 6;
 
     function updateResultsCounter() {
         if (resultsCounter) {
@@ -124,20 +126,24 @@
         card.className = 'profile-card';
         card.dataset.username = member.username;
         card.style.setProperty('--offset', (deck.length - 1) - index);
+        card.tabIndex = -1;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `Відкрити профіль користувача ${member.name}`);
+        card.dataset.dragging = 'false';
 
-        const media = document.createElement('div');
-        media.className = 'profile-card__media';
+        const photoWrapper = document.createElement('div');
+        photoWrapper.className = 'profile-card__photo';
 
-        const img = document.createElement('img');
-        img.src = member.banner || member.avatar || 'https://placehold.co/600x800?text=Lixy';
-        img.alt = `${member.name} — фото профілю`;
-        media.appendChild(img);
+        const photo = document.createElement('img');
+        photo.src = member.avatar || defaultCardPhoto;
+        photo.alt = `${member.name} — аватар`;
+        photoWrapper.appendChild(photo);
 
         if (member.gender_display) {
             const badge = document.createElement('span');
             badge.className = 'profile-card__badge';
             badge.textContent = member.gender_display;
-            media.appendChild(badge);
+            photoWrapper.appendChild(badge);
         }
 
         const body = document.createElement('div');
@@ -167,17 +173,29 @@
         bio.textContent = member.bio || 'Користувач поки не поділився інформацією про себе.';
         body.appendChild(bio);
 
-        const footer = document.createElement('div');
-        footer.className = 'profile-card__footer';
-        const profileLink = document.createElement('a');
-        profileLink.className = 'btn btn-outline-primary';
-        profileLink.href = `/members/profile/${member.username}`;
-        profileLink.textContent = 'Дивитися профіль';
-        footer.appendChild(profileLink);
-        body.appendChild(footer);
+        const cta = document.createElement('div');
+        cta.className = 'profile-card__cta';
+        cta.innerHTML = '<span class="text-primary fw-semibold">Натисніть, щоб переглянути профіль</span>';
+        body.appendChild(cta);
 
-        card.appendChild(media);
+        card.appendChild(photoWrapper);
         card.appendChild(body);
+
+        card.addEventListener('click', (event) => {
+            if (card.dataset.dragging === 'true') {
+                event.preventDefault();
+                return;
+            }
+
+            window.location.href = `/members/profile/${member.username}`;
+        });
+
+        card.addEventListener('keydown', (event) => {
+            if ((event.key === 'Enter' || event.key === ' ') && card.classList.contains('active')) {
+                event.preventDefault();
+                window.location.href = `/members/profile/${member.username}`;
+            }
+        });
 
         return card;
     }
@@ -229,6 +247,7 @@
         cards.forEach((card) => {
             card.classList.remove('active', 'liked', 'dismissed');
             card.removeEventListener('pointerdown', onPointerDown);
+            card.tabIndex = -1;
         });
 
         const nextCard = cards[cards.length - 1];
@@ -244,6 +263,7 @@
         if (activeCard) {
             activeCard.classList.add('active');
             activeCard.addEventListener('pointerdown', onPointerDown);
+            activeCard.tabIndex = 0;
         } else {
             clearFeedback();
         }
@@ -257,6 +277,7 @@
         }
 
         pointerStart = { x: event.clientX, y: event.clientY };
+        activeCard.dataset.dragging = 'false';
         activeCard.setPointerCapture(event.pointerId);
         activeCard.style.transition = 'none';
 
@@ -268,6 +289,10 @@
             const deltaX = moveEvent.clientX - pointerStart.x;
             const deltaY = moveEvent.clientY - pointerStart.y;
             const rotation = deltaX * 0.05;
+
+            if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
+                activeCard.dataset.dragging = 'true';
+            }
 
             activeCard.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg)`;
 
@@ -297,6 +322,7 @@
             if (Math.abs(deltaX) > threshold) {
                 finalizeSwipe(deltaX > 0);
             } else {
+                activeCard.dataset.dragging = 'false';
                 activeCard.style.transition = 'transform 0.3s ease';
                 activeCard.style.transform = 'translate(0px, 0px) rotate(0deg)';
                 activeCard.addEventListener('transitionend', () => {
