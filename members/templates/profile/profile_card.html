@@ -1,29 +1,31 @@
-<div class="card mb-3">
+<div class="card mb-3 profile-card shadow-sm">
+    <div class="profile-banner position-relative">
+        {% if member.banner %}
+            <img src="{{ member.banner.url }}" alt="Image Banner" class="image-banner"/>
+        {% else %}
+            <img src="/media/bgs/default/default_banner.png" class="image-banner" alt="Default banner"/>
+        {% endif %}
+    </div>
+
     <div class="card-body member-card">
-        <div class="row profile-banner d-flex">
-            {% if member.banner %}
-                <img src="{{ member.banner.url }}" alt="Image Banner" class="card-img-top image-banner"/>
-            {% else %}
-                <img src="/media/bgs/default/default_banner.png" class="image-banner"/>
-            {% endif %}
-        </div>
+        <div class="profile-header d-flex flex-column flex-md-row align-items-md-end gap-4">
+            <div class="profile-avatar-wrapper">
+                <img src="{{ member.avatar.url }}" alt="Avatar" class="rounded-circle avatar shadow"/>
+            </div>
 
-        <div class="row">
-            <img src="{{ member.avatar.url }}" alt="Avatar" class="rounded-circle mr-3 avatar"/>
-
-            <div class="member-details">
-                <div class="member-details-name d-flex justify-content-between">
+            <div class="member-details flex-grow-1">
+                <div class="member-details-name d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
                     <div class="member-details-title">
-                        <p class="card-text member-name">
+                        <p class="card-text member-name mb-1">
                             {{ member.first_name }} {{member.last_name}}
                             {% if member.is_verified %}
                                 <i class="bi bi-patch-check-fill"></i>
                             {% endif %}
                         </p>
-                        <p class="card-text member-nickname">@{{ member.username }}</p>
+                        <p class="card-text member-nickname mb-0">@{{ member.username }}</p>
                     </div>
 
-                    <div class="member-details-actions">
+                    <div class="member-details-actions d-flex flex-wrap gap-2">
                         {% if user.is_authenticated and user.username == member.username %}
                             <a href="/members/profile/edit-profile/{{ member.username }}" class="btn btn-primary">Edit Profile</a>
                         {% else %}
@@ -40,108 +42,118 @@
                     </div>
                 </div>
 
-                <div class="member-details-extras mt-1">
+                <div class="member-details-extras mt-3">
                     {% if member.bio %}
-                        <p class="card-text member-bio">{{ member.bio }}</p>
+                        <p class="card-text member-bio mb-3">{{ member.bio }}</p>
                     {% endif %}
 
-                    <div class="member-details-extras-short-info d-flex flex-wrap gap-3">
+                    <div class="member-details-extras-short-info d-flex flex-wrap gap-2">
                         {% if member.country %}
-                            <p class="card-text text-member-details-extras mb-0">
+                            <span class="profile-chip">
                                 <i class="icon-secondary bi bi-geo-alt-fill"></i>
-                                {% if member.city %}
-                                    {{ member.city }},
-                                {% endif %}
-                                {{ member.country }}
-                            </p>
+                                <span>
+                                    {% if member.city %}
+                                        {{ member.city }},
+                                    {% endif %}
+                                    {{ member.country }}
+                                </span>
+                            </span>
                         {% endif %}
 
                         {% if member_age %}
-                            <p class="card-text text-member-details-extras mb-0">
+                            <span class="profile-chip">
                                 <i class="icon-secondary bi bi-cake-fill"></i>
-                                {{ member_age }} років
-                            </p>
+                                <span>{{ member_age }} років</span>
+                            </span>
                         {% endif %}
 
                         {% if member.gender %}
-                            <p class="card-text text-member-details-extras mb-0">
+                            <span class="profile-chip">
                                 <i class="icon-secondary bi bi-gender-ambiguous"></i>
-                                {% if member.gender == 'M' %}
-                                    Чоловік
-                                {% elif member.gender == 'F' %}
-                                    Жінка
-                                {% else %}
-                                    {{ member.get_gender_display }}
-                                {% endif %}
-                            </p>
+                                <span>
+                                    {% if member.gender == 'M' %}
+                                        Чоловік
+                                    {% elif member.gender == 'F' %}
+                                        Жінка
+                                    {% else %}
+                                        {{ member.get_gender_display }}
+                                    {% endif %}
+                                </span>
+                            </span>
                         {% endif %}
                     </div>
                 </div>
+            </div>
+        </div>
 
-                {% if member.relationship_status or member.relationship_goal or member.sexual_orientation or member.height_cm or member.body_type or member.education_level or member.occupation or member.company or member.languages or member.interests or member.children or member.smoking or member.drinking %}
-                    <div class="member-details-extended mt-3">
-                        <h6 class="text-uppercase text-muted small mb-2">Додаткова інформація</h6>
-                        <dl class="row gy-2 gx-3 mb-0">
-                            {% if member.relationship_status %}
-                                <dt class="col-sm-5 small text-muted">Сімейний стан</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_relationship_status_display }}</dd>
-                            {% endif %}
-                            {% if member.relationship_goal %}
-                                <dt class="col-sm-5 small text-muted">Мета знайомства</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_relationship_goal_display }}</dd>
-                            {% endif %}
-                            {% if member.sexual_orientation %}
-                                <dt class="col-sm-5 small text-muted">Орієнтація</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_sexual_orientation_display }}</dd>
-                            {% endif %}
-                            {% if member.height_cm %}
-                                <dt class="col-sm-5 small text-muted">Зріст</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.height_cm }} см</dd>
-                            {% endif %}
-                            {% if member.body_type %}
-                                <dt class="col-sm-5 small text-muted">Статура</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_body_type_display }}</dd>
-                            {% endif %}
-                            {% if member.education_level %}
-                                <dt class="col-sm-5 small text-muted">Освіта</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_education_level_display }}</dd>
-                            {% endif %}
-                            {% if member.occupation %}
-                                <dt class="col-sm-5 small text-muted">Професія</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.occupation }}</dd>
-                            {% endif %}
-                            {% if member.company %}
-                                <dt class="col-sm-5 small text-muted">Місце роботи</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.company }}</dd>
-                            {% endif %}
-                            {% if member.languages %}
-                                <dt class="col-sm-5 small text-muted">Мови</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.languages }}</dd>
-                            {% endif %}
-                            {% if member.interests %}
-                                <dt class="col-sm-5 small text-muted">Інтереси</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.interests }}</dd>
-                            {% endif %}
-                            {% if member.children %}
-                                <dt class="col-sm-5 small text-muted">Діти</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_children_display }}</dd>
-                            {% endif %}
-                            {% if member.smoking %}
-                                <dt class="col-sm-5 small text-muted">Куріння</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_smoking_display }}</dd>
-                            {% endif %}
-                            {% if member.drinking %}
-                                <dt class="col-sm-5 small text-muted">Алкоголь</dt>
-                                <dd class="col-sm-7 mb-0">{{ member.get_drinking_display }}</dd>
-                            {% endif %}
-                        </dl>
-                    </div>
-                {% endif %}
+        {% if member.relationship_status or member.relationship_goal or member.sexual_orientation or member.height_cm or member.body_type or member.education_level or member.occupation or member.company or member.languages or member.interests or member.children or member.smoking or member.drinking %}
+            <div class="member-details-extended mt-4">
+                <h6 class="text-uppercase small mb-3">Додаткова інформація</h6>
+                <dl class="row gy-3 gx-3 mb-0">
+                    {% if member.relationship_status %}
+                        <dt class="col-sm-5 col-lg-4 small">Сімейний стан</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_relationship_status_display }}</dd>
+                    {% endif %}
+                    {% if member.relationship_goal %}
+                        <dt class="col-sm-5 col-lg-4 small">Мета знайомства</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_relationship_goal_display }}</dd>
+                    {% endif %}
+                    {% if member.sexual_orientation %}
+                        <dt class="col-sm-5 col-lg-4 small">Орієнтація</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_sexual_orientation_display }}</dd>
+                    {% endif %}
+                    {% if member.height_cm %}
+                        <dt class="col-sm-5 col-lg-4 small">Зріст</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.height_cm }} см</dd>
+                    {% endif %}
+                    {% if member.body_type %}
+                        <dt class="col-sm-5 col-lg-4 small">Статура</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_body_type_display }}</dd>
+                    {% endif %}
+                    {% if member.education_level %}
+                        <dt class="col-sm-5 col-lg-4 small">Освіта</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_education_level_display }}</dd>
+                    {% endif %}
+                    {% if member.occupation %}
+                        <dt class="col-sm-5 col-lg-4 small">Професія</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.occupation }}</dd>
+                    {% endif %}
+                    {% if member.company %}
+                        <dt class="col-sm-5 col-lg-4 small">Місце роботи</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.company }}</dd>
+                    {% endif %}
+                    {% if member.languages %}
+                        <dt class="col-sm-5 col-lg-4 small">Мови</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.languages }}</dd>
+                    {% endif %}
+                    {% if member.interests %}
+                        <dt class="col-sm-5 col-lg-4 small">Інтереси</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.interests }}</dd>
+                    {% endif %}
+                    {% if member.children %}
+                        <dt class="col-sm-5 col-lg-4 small">Діти</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_children_display }}</dd>
+                    {% endif %}
+                    {% if member.smoking %}
+                        <dt class="col-sm-5 col-lg-4 small">Куріння</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_smoking_display }}</dd>
+                    {% endif %}
+                    {% if member.drinking %}
+                        <dt class="col-sm-5 col-lg-4 small">Алкоголь</dt>
+                        <dd class="col-sm-7 col-lg-8 mb-0">{{ member.get_drinking_display }}</dd>
+                    {% endif %}
+                </dl>
+            </div>
+        {% endif %}
 
-                <div class="member-connections">
-                    <p class="member-followers-title">Підписники: {{ member.followers.count }}</p>
-                    <p class="member-following-title">Підписки: {{ member.followings.count }}</p>
-                </div>
+        <div class="member-connections mt-4">
+            <div class="member-connection-tile">
+                <span class="member-connection-label">Підписники</span>
+                <span class="member-connection-value">{{ member.followers.count }}</span>
+            </div>
+            <div class="member-connection-tile">
+                <span class="member-connection-label">Підписки</span>
+                <span class="member-connection-value">{{ member.followings.count }}</span>
             </div>
         </div>
     </div>
