@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Правила спільноти{% endblock %}
+
+{% block content %}
+<section class="profile-settings mt-4">
+    <a class="btn btn-link ps-0" href="{% url 'profile' member.username %}">
+        <i class="bi bi-arrow-left"></i>
+        Повернутися до профілю
+    </a>
+
+    <div class="card profile-settings__card mt-3">
+        <div class="card-body">
+            <div class="profile-settings__card-header">
+                <i class="bi bi-journal-check" aria-hidden="true"></i>
+                <h1 class="h4 mb-0">Правила спільноти</h1>
+            </div>
+            <p class="text-muted">Ми цінуємо взаємну повагу та безпечний простір для кожного. Дотримання простих правил допомагає підтримувати доброзичливу атмосферу.</p>
+            <ul class="profile-settings__list">
+                {% for rule in settings_context.community_rules %}
+                    <li>{{ rule }}</li>
+                {% endfor %}
+            </ul>
+            <p class="small text-muted mb-0">Порушення правил може призвести до обмеження доступу до сервісу. Якщо помітили щось підозріле — повідомте нашу службу підтримки.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

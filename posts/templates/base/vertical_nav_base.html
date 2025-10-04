@@ -43,25 +43,25 @@
                     aria-hidden="true"
                 >
                     <li>
-                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#notifications">
+                        <a class="nav-sublink" href="{% url 'profile_settings_notifications' user.username %}">
                             <i class="bi bi-bell-fill"></i>
                             <span>Сповіщення</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#privacy">
+                        <a class="nav-sublink" href="{% url 'profile_settings_privacy' user.username %}">
                             <i class="bi bi-shield-lock-fill"></i>
                             <span>Конфіденційність</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#rules">
+                        <a class="nav-sublink" href="{% url 'profile_settings_rules' user.username %}">
                             <i class="bi bi-journal-check"></i>
                             <span>Правила</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-sublink" href="/members/profile/{{ user.username }}#subscriptions">
+                        <a class="nav-sublink" href="{% url 'profile_settings_subscriptions' user.username %}">
                             <i class="bi bi-repeat"></i>
                             <span>Налаштування підписок</span>
                         </a>
