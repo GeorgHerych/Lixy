@@ -730,7 +730,13 @@ p.member-followers-title {
 .profile-settings__grid {
     display: grid;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .profile-settings__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 .profile-settings__card {
@@ -757,6 +763,38 @@ p.member-followers-title {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
+}
+
+.profile-settings__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--btn-secondary-border);
+    background-color: transparent;
+    color: var(--text-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.profile-settings__back i {
+    font-size: 1rem;
+    color: currentColor;
+}
+
+.profile-settings__back:hover,
+.profile-settings__back:focus {
+    background-color: var(--btn-secondary-bg-hover);
+    border-color: var(--btn-secondary-border-hover);
+    color: var(--btn-secondary-text);
+    text-decoration: none;
+}
+
+.profile-settings__back:focus-visible {
+    outline: 2px solid var(--btn-secondary-border-hover);
+    outline-offset: 2px;
 }
 
 .profile-settings__list {
