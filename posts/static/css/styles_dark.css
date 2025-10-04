@@ -64,6 +64,9 @@
     /* nav */
     --nav-bg: rgba(10, 12, 16, 0.65);
     --nav-border: 1px solid #2f323e;
+    --vertical-nav-collapsed-width: 72px;
+    --vertical-nav-expanded-width: 250px;
+    --vertical-nav-padding-x: 16px;
 }
 
 * {
@@ -119,11 +122,15 @@ body {
 
 .settings-submenu {
     list-style: none;
-    padding-left: 44px;
+    padding-left: 0;
     margin: 12px 0 0;
     display: none;
     flex-direction: column;
     gap: 8px;
+}
+
+.vertical-nav:hover .settings-submenu {
+    padding-left: 44px;
 }
 
 .settings-submenu.settings-submenu--visible {
@@ -137,6 +144,7 @@ body {
     font-size: 16px;
     text-decoration: none;
     color: var(--text-color);
+    justify-content: center;
 }
 
 .nav-sublink:hover,
@@ -147,6 +155,22 @@ body {
 .nav-sublink i {
     font-size: 18px;
     color: currentColor;
+}
+
+.vertical-nav:hover .nav-sublink {
+    justify-content: flex-start;
+}
+
+.nav-sublink span {
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.vertical-nav:hover .nav-sublink span {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .navbar-brand:focus,
@@ -537,32 +561,54 @@ p.member-followers-title {
 
 .vertical-nav {
     position: fixed;
-    width: 250px;
-    padding-top: 40px;
-    padding-left: 30px;
+    width: var(--vertical-nav-collapsed-width);
+    padding: 40px var(--vertical-nav-padding-x) 0;
     height: 100vh;
     background-color: var(--nav-bg);
     border-right: var(--nav-border);
-    transition: width 500ms ease-in-out 0ms;
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+
+.vertical-nav:hover {
+    width: var(--vertical-nav-expanded-width);
+}
+
+.vertical-nav > ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .vertical-nav > ul > li > a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
     font-size: 20px;
     text-align: start;
+    justify-content: center;
+}
+
+.vertical-nav:hover > ul > li > a {
+    justify-content: flex-start;
 }
 
 
 .nav-container {
     position: fixed;
-    margin-left: 250px;
-    padding-right: 250px;
+    margin-left: var(--vertical-nav-collapsed-width);
+    padding-right: var(--vertical-nav-collapsed-width);
     width: 100%;
     top:0;
     z-index: 1001;
     background-color: var(--nav-bg);
     border-bottom: var(--nav-border);
     backdrop-filter: blur(12px);
-    transition: margin-left 500ms ease-in-out 0ms, padding-right 500ms ease-in-out;
+    transition: margin-left 0.3s ease, padding-right 0.3s ease;
 }
 
 .bottom-nav {
@@ -583,7 +629,7 @@ p.member-followers-title {
 
 .nav-posts {
     position: absolute;
-    left: calc(50% - 250px);
+    left: calc(50% - var(--vertical-nav-collapsed-width));
     transform: translateX(-50%);
 }
 
@@ -593,7 +639,15 @@ p.member-followers-title {
 
 .nav-title {
     margin: 0px;
-    padding-left: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.vertical-nav:hover .nav-title {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .theme-toggle {
@@ -601,26 +655,6 @@ p.member-followers-title {
 }
 
 @media only screen and (max-width: 1300px) {
-    .nav-container {
-        margin-left: 80px;
-        padding-right: 80px;
-        transition: margin-left 500ms ease-in-out 0ms, padding-right 500ms ease-in-out;
-    }
-
-    .nav-posts {
-        left: calc(50% - 80px);
-    }
-
-    .vertical-nav {
-        width: 80px;
-        transition: width 500ms ease-in-out 0ms;
-    }
-
-    .nav-title {
-        display: none;
-        transition: all 500ms ease-in-out 0ms;
-    }
-
     .nav-block {
         flex-direction: row;
     }
@@ -642,7 +676,7 @@ p.member-followers-title {
     .nav-container {
         margin-left: 0px;
         padding-right: 0px;
-        transition: margin-left 500ms ease-in-out 0ms, padding-right 500ms ease-in-out;
+        transition: margin-left 0.3s ease, padding-right 0.3s ease;
     }
 
     .auth-nav {
