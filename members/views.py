@@ -244,6 +244,33 @@ def _calculate_age(birthdate):
     return years - 1
 
 
+def _extract_interests(raw_interests):
+    if not raw_interests:
+        return []
+
+    normalized = raw_interests
+    for delimiter in (';', '\n'):
+        normalized = normalized.replace(delimiter, ',')
+
+    return [interest.strip() for interest in normalized.split(',') if interest.strip()]
+
+
+def _estimate_distance(base_member, other_member):
+    if not isinstance(base_member, Member):
+        return None
+
+    if base_member.city_id and other_member.city_id and base_member.city_id == other_member.city_id:
+        return 5
+
+    if base_member.country_id and other_member.country_id and base_member.country_id == other_member.country_id:
+        return 120
+
+    if base_member.country_id or base_member.city_id:
+        return 500
+
+    return None
+
+
 @login_required(login_url="/members/login")
 def discover(request):
     set_prev_page(request.session, "/members/discover/")
@@ -251,9 +278,13 @@ def discover(request):
     members = Member.objects.exclude(id=request.user.id).select_related('country', 'city')
 
     member_cards = []
+    interests_pool = set()
 
     for member in members:
         age = _calculate_age(member.birthdate)
+        interests = _extract_interests(member.interests)
+
+        interests_pool.update(interests)
 
         member_cards.append({
             'username': member.username,
@@ -268,10 +299,14 @@ def discover(request):
             'country_id': member.country.id if member.country else None,
             'avatar': member.avatar.url if member.avatar else "",
             'banner': member.banner.url if member.banner else "",
+            'distance_km': _estimate_distance(request.user, member),
+            'interests': interests,
         })
 
     context = {
         'members_data': member_cards,
+        'countries': Country.objects.order_by('name'),
+        'interests': sorted(interests_pool, key=lambda value: value.lower()),
     }
 
     return render(request, 'profile/discover.html', context)
