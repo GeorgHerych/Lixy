@@ -22,12 +22,22 @@
     const countrySelect = document.querySelector('[data-country]');
     const citySelect = document.querySelector('[data-city]');
     const resultsCounter = document.querySelector('[data-results-count]');
+    const filterToggle = document.querySelector('[data-filter-toggle]');
+    const filterPanel = document.querySelector('[data-filter-panel]');
+    const filterOverlay = document.querySelector('[data-filter-overlay]');
+    const filterCloseButtons = document.querySelectorAll('[data-filter-close]');
+    const filterForm = document.querySelector('[data-filter-form]');
+    const resetFiltersButton = document.querySelector('[data-reset-filters]');
+    const distanceInput = document.querySelector('[data-distance]');
+    const distanceValue = document.querySelector('[data-distance-value]');
+    const interestCheckboxes = filterForm ? filterForm.querySelectorAll('[data-interest-filter]') : [];
 
     let filteredMembers = members.slice();
     let deck = filteredMembers.slice();
     const history = [];
     let activeCard = null;
     let pointerStart = null;
+    let lastFocusedElement = null;
     const defaultAvatar = 'https://placehold.co/96x96?text=L';
     const defaultCardPhoto = 'https://placehold.co/600x600?text=Lixy';
     const dragThreshold = 6;
@@ -399,6 +409,12 @@
         const maxAge = parseInt(maxAgeInput ? maxAgeInput.value : '', 10);
         const countryId = countrySelect ? countrySelect.value : '';
         const cityId = citySelect ? citySelect.value : '';
+        const maxDistance = parseInt(distanceInput ? distanceInput.value : '', 10);
+        const unlimitedDistance = distanceInput ? parseInt(distanceInput.dataset.unlimitedValue || '', 10) : Number.NaN;
+        const limitByDistance = distanceInput && !Number.isNaN(maxDistance) && (Number.isNaN(unlimitedDistance) || maxDistance < unlimitedDistance);
+        const selectedInterests = Array.from(interestCheckboxes || [])
+            .filter((checkbox) => checkbox.checked)
+            .map((checkbox) => checkbox.value);
 
         filteredMembers = members.filter((member) => {
             if (lookingFor === 'female' && member.gender !== 'F') {
@@ -413,11 +429,22 @@
             if (cityId && String(member.city_id || '') !== cityId) {
                 return false;
             }
+            if (limitByDistance && member.distance_km !== null && member.distance_km > maxDistance) {
+                return false;
+            }
             if (!Number.isNaN(minAge) && member.age !== null && member.age < minAge) {
                 return false;
             }
             if (!Number.isNaN(maxAge) && member.age !== null && member.age > maxAge) {
                 return false;
+            }
+            if (selectedInterests.length > 0) {
+                const hasMatchingInterest = Array.isArray(member.interests)
+                    && member.interests.some((interest) => selectedInterests.includes(interest));
+
+                if (!hasMatchingInterest) {
+                    return false;
+                }
             }
             return true;
         });
@@ -425,6 +452,167 @@
         deck = filteredMembers.slice();
         history.length = 0;
         renderDeck();
+    }
+
+    function updateDistanceLabel() {
+        if (!distanceInput || !distanceValue) {
+            return;
+        }
+
+        const rawValue = parseInt(distanceInput.value, 10);
+        const unlimitedValue = parseInt(distanceInput.dataset.unlimitedValue || '', 10);
+
+        if (!Number.isNaN(unlimitedValue) && rawValue >= unlimitedValue) {
+            distanceValue.textContent = 'Будь-яка';
+            return;
+        }
+
+        if (Number.isNaN(rawValue)) {
+            distanceValue.textContent = 'Будь-яка';
+            return;
+        }
+
+        distanceValue.textContent = `до ${rawValue} км`;
+    }
+
+    function updateInterestChipsState() {
+        (interestCheckboxes || []).forEach((checkbox) => {
+            const chip = checkbox.closest('.discover-filters__chip');
+            if (!chip) {
+                return;
+            }
+
+            chip.classList.toggle('discover-filters__chip--checked', checkbox.checked);
+        });
+    }
+
+    function getFocusableElements(container) {
+        if (!container) {
+            return [];
+        }
+
+        return Array.from(container.querySelectorAll('a[href], button:not([disabled]), textarea, input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'));
+    }
+
+    function closeFilters(options = {}) {
+        const { restoreFocus = true } = options;
+
+        if (filterPanel) {
+            filterPanel.classList.remove('is-open');
+            filterPanel.setAttribute('aria-hidden', 'true');
+        }
+
+        if (filterToggle) {
+            filterToggle.setAttribute('aria-expanded', 'false');
+        }
+
+        if (filterOverlay) {
+            filterOverlay.classList.remove('is-visible');
+        }
+
+        document.body.classList.remove('discover-filters-open');
+
+        document.removeEventListener('keydown', handleFilterKeydown);
+
+        if (restoreFocus && lastFocusedElement) {
+            lastFocusedElement.focus({ preventScroll: true });
+        }
+    }
+
+    function openFilters() {
+        if (!filterPanel) {
+            return;
+        }
+
+        lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+        filterPanel.classList.add('is-open');
+        filterPanel.setAttribute('aria-hidden', 'false');
+
+        if (filterToggle) {
+            filterToggle.setAttribute('aria-expanded', 'true');
+        }
+
+        if (filterOverlay) {
+            filterOverlay.classList.add('is-visible');
+        }
+
+        document.body.classList.add('discover-filters-open');
+
+        const focusable = getFocusableElements(filterPanel);
+        if (focusable.length > 0) {
+            focusable[0].focus();
+        }
+
+        document.addEventListener('keydown', handleFilterKeydown);
+    }
+
+    function handleFilterKeydown(event) {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            closeFilters();
+            return;
+        }
+
+        if (event.key !== 'Tab' || !filterPanel || !filterPanel.classList.contains('is-open')) {
+            return;
+        }
+
+        const focusable = getFocusableElements(filterPanel);
+        if (focusable.length === 0) {
+            return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    }
+
+    function resetFilters() {
+        if (lookingForSelect) {
+            lookingForSelect.value = 'any';
+        }
+
+        if (minAgeInput) {
+            minAgeInput.value = '';
+        }
+
+        if (maxAgeInput) {
+            maxAgeInput.value = '';
+        }
+
+        if (countrySelect) {
+            countrySelect.value = '';
+        }
+
+        if (citySelect) {
+            citySelect.innerHTML = '<option value="">Усі міста</option>';
+            citySelect.disabled = true;
+        }
+
+        if (distanceInput) {
+            const defaultValue = parseInt(distanceInput.dataset.defaultValue || distanceInput.max || '', 10);
+            if (!Number.isNaN(defaultValue)) {
+                distanceInput.value = String(defaultValue);
+            } else {
+                distanceInput.value = distanceInput.max || '';
+            }
+            updateDistanceLabel();
+        }
+
+        (interestCheckboxes || []).forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+        updateInterestChipsState();
+
+        applyFilters();
     }
 
     function loadCities(countryId) {
@@ -489,6 +677,48 @@
 
     if (citySelect) {
         citySelect.addEventListener('change', applyFilters);
+    }
+
+    if (distanceInput) {
+        distanceInput.addEventListener('input', () => {
+            updateDistanceLabel();
+            applyFilters();
+        });
+        updateDistanceLabel();
+    }
+
+    if (filterToggle) {
+        filterToggle.addEventListener('click', () => {
+            if (filterPanel && filterPanel.classList.contains('is-open')) {
+                closeFilters();
+            } else {
+                openFilters();
+            }
+        });
+    }
+
+    if (filterOverlay) {
+        filterOverlay.addEventListener('click', () => closeFilters());
+    }
+
+    if (filterCloseButtons && filterCloseButtons.length > 0) {
+        filterCloseButtons.forEach((button) => {
+            button.addEventListener('click', () => closeFilters());
+        });
+    }
+
+    if (resetFiltersButton) {
+        resetFiltersButton.addEventListener('click', resetFilters);
+    }
+
+    if (interestCheckboxes && interestCheckboxes.length > 0) {
+        interestCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                updateInterestChipsState();
+                applyFilters();
+            });
+        });
+        updateInterestChipsState();
     }
 
     renderDeck();
