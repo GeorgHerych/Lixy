@@ -121,9 +121,13 @@ body {
     list-style: none;
     padding-left: 44px;
     margin: 12px 0 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 8px;
+}
+
+.settings-submenu.settings-submenu--visible {
+    display: flex;
 }
 
 .nav-sublink {

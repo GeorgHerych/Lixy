@@ -25,11 +25,23 @@
     <ul class="navbar-nav nav-bottom">
         {% if user.is_authenticated %}
             <li class="nav-item nav-item-settings">
-                <a class="nav-link nav-link-static" href="/members/profile/{{ user.username }}#settings">
+                <a
+                    class="nav-link nav-link-static"
+                    href="/members/profile/{{ user.username }}#settings"
+                    data-settings-toggle
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="settings-submenu"
+                >
                     <i class="bi bi-gear-fill"></i>
                     <p class="nav-title">Налаштування</p>
                 </a>
-                <ul class="settings-submenu">
+                <ul
+                    class="settings-submenu"
+                    id="settings-submenu"
+                    data-settings-submenu
+                    aria-hidden="true"
+                >
                     <li>
                         <a class="nav-sublink" href="/members/profile/{{ user.username }}#notifications">
                             <i class="bi bi-bell-fill"></i>
