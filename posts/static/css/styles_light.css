@@ -519,3 +519,62 @@ p.member-followers-title {
     height: 56px;
     object-fit: cover;
 }
+
+.profile-settings {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.profile-settings__intro .card-body {
+    text-align: left;
+}
+
+.profile-settings__grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.profile-settings__card {
+    height: 100%;
+    text-align: left;
+}
+
+.profile-settings__card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.profile-settings__card-header i {
+    font-size: 1.5rem;
+}
+
+.profile-settings__options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.profile-settings__list {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.profile-settings__cta {
+    margin-top: 1.25rem;
+}
+
+.profile-settings__card .form-check-input,
+.profile-settings__card .form-check-label {
+    cursor: pointer;
+}
