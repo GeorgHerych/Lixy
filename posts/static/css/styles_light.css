@@ -3,6 +3,12 @@
     color: #0a0c10;
 }
 
+:root {
+    --vertical-nav-collapsed-width: 72px;
+    --vertical-nav-expanded-width: 250px;
+    --vertical-nav-padding-x: 16px;
+}
+
 h1, h2, h3, h4, h5, p, ul, a, i {
     color: #0a0c10;
 }
@@ -429,16 +435,56 @@ p.member-followers-title {
 
 .vertical-nav {
     position: fixed;
-    width: 250px;
-    padding-top: 40px;
-    padding-left: 30px;
+    width: var(--vertical-nav-collapsed-width);
+    padding: 40px var(--vertical-nav-padding-x) 0;
     height: 100vh;
     border-right: 1px solid #2f323e;
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+
+.vertical-nav:hover {
+    width: var(--vertical-nav-expanded-width);
+}
+
+.vertical-nav > ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .vertical-nav > ul > li > a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
     font-size: 20px;
     text-align: start;
+    justify-content: center;
+}
+
+.vertical-nav:hover > ul > li > a {
+    justify-content: flex-start;
+}
+
+.vertical-nav i {
+    font-size: 20px;
+}
+
+.nav-title {
+    margin: 0;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.vertical-nav:hover .nav-title {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .nav-bottom {
@@ -452,11 +498,15 @@ p.member-followers-title {
 
 .settings-submenu {
     list-style: none;
-    padding-left: 44px;
+    padding-left: 0;
     margin: 12px 0 0;
     display: none;
     flex-direction: column;
     gap: 8px;
+}
+
+.vertical-nav:hover .settings-submenu {
+    padding-left: 44px;
 }
 
 .settings-submenu.settings-submenu--visible {
@@ -470,6 +520,23 @@ p.member-followers-title {
     font-size: 16px;
     text-decoration: none;
     color: #0a0c10;
+    justify-content: center;
+}
+
+.vertical-nav:hover .nav-sublink {
+    justify-content: flex-start;
+}
+
+.nav-sublink span {
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.vertical-nav:hover .nav-sublink span {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .nav-sublink:hover,
@@ -484,19 +551,20 @@ p.member-followers-title {
 
 .nav-posts {
     position: absolute;
-    left: calc(50% - 250px);
+    left: calc(50% - var(--vertical-nav-collapsed-width));
     transform: translateX(-50%);
 }
 
 .nav-container {
     position: fixed;
-    margin-left: 250px;
-    padding-right: 250px;
+    margin-left: var(--vertical-nav-collapsed-width);
+    padding-right: var(--vertical-nav-collapsed-width);
     width: 100%;
     top:0;
     z-index: 1001;
     border-bottom: 1px solid #2f323e;
     backdrop-filter: blur(12px);
+    transition: margin-left 0.3s ease, padding-right 0.3s ease;
 }
 
 .container {
