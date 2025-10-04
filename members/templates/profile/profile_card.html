@@ -27,15 +27,20 @@
                         {% if user.is_authenticated and user.username == member.username %}
                             <a href="/members/profile/edit-profile/{{ member.username }}" class="btn btn-primary">Edit Profile</a>
                         {% else %}
-                            {% if user.followings %}
-                                {% if member in user.followings.all %}
-                                    <a href="/members/unfollow/{{ member.username }}" class="btn btn-secondary">Unfollow</a>
+                            <div class="d-flex flex-wrap gap-2">
+                                {% if user.followings %}
+                                    {% if member in user.followings.all %}
+                                        <a href="/members/unfollow/{{ member.username }}" class="btn btn-secondary">Unfollow</a>
+                                    {% else %}
+                                        <a href="/members/follow/{{ member.username }}" class="btn btn-primary">Follow</a>
+                                    {% endif %}
                                 {% else %}
                                     <a href="/members/follow/{{ member.username }}" class="btn btn-primary">Follow</a>
                                 {% endif %}
-                            {% else %}
-                                <a href="/members/follow/{{ member.username }}" class="btn btn-primary">Follow</a>
-                            {% endif %}
+                                <a href="{% url 'dialog_detail' member.username %}" class="btn btn-outline-primary">
+                                    Написати
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
