@@ -568,6 +568,7 @@ p.member-followers-title {
     border-right: var(--nav-border);
     overflow: hidden;
     transition: width 0.3s ease;
+    z-index: 1100;
 }
 
 .vertical-nav:hover {
@@ -642,12 +643,15 @@ p.member-followers-title {
     white-space: nowrap;
     opacity: 0;
     transform: translateX(-12px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    max-width: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, max-width 0.2s ease;
 }
 
 .vertical-nav:hover .nav-title {
     opacity: 1;
     transform: translateX(0);
+    max-width: 180px;
 }
 
 .theme-toggle {
