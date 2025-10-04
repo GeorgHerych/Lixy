@@ -54,24 +54,117 @@ class EditMemberForm(forms.ModelForm):
     country = forms.ModelChoiceField(required=False, queryset=Country.objects.all(), widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Country'}), label='')
     city = forms.ModelChoiceField(required=False, queryset=City.objects.none(), widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'City'}), label='')
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': 'Tell about yourself'}), label='')
+    relationship_status = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Сімейний стан')] + list(Member.RELATIONSHIP_STATUSES),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
+    relationship_goal = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Мета знайомства')] + list(Member.RELATIONSHIP_GOALS),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
+    sexual_orientation = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Сексуальна орієнтація')] + list(Member.SEXUAL_ORIENTATIONS),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
+    height_cm = forms.IntegerField(
+        required=False,
+        min_value=100,
+        max_value=250,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Зріст (см)'}),
+        label=''
+    )
+    body_type = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Тип статури')] + list(Member.BODY_TYPES),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
+    education_level = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Освіта')] + list(Member.EDUCATION_LEVELS),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
+    occupation = forms.CharField(
+        required=False,
+        max_length=120,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Професія'}),
+        label=''
+    )
+    company = forms.CharField(
+        required=False,
+        max_length=120,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Місце роботи'}),
+        label=''
+    )
+    languages = forms.CharField(
+        required=False,
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Мови, якими спілкуєтеся'}),
+        label=''
+    )
+    interests = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': 'Хобі та інтереси'}),
+        label=''
+    )
+    children = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Діти')] + list(Member.CHILDREN_PREFERENCES),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
+    smoking = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Ставлення до куріння')] + list(Member.HABITS),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
+    drinking = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Ставлення до алкоголю')] + list(Member.HABITS),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label=''
+    )
 
     class Meta:
         model = Member
-        fields = ('banner', 'avatar', 'username', 'first_name', 'last_name', 'gender', 'birthdate', 'country', 'city', 'bio')
+        fields = (
+            'banner',
+            'avatar',
+            'username',
+            'first_name',
+            'last_name',
+            'gender',
+            'birthdate',
+            'country',
+            'city',
+            'bio',
+            'relationship_status',
+            'relationship_goal',
+            'sexual_orientation',
+            'height_cm',
+            'body_type',
+            'education_level',
+            'occupation',
+            'company',
+            'languages',
+            'interests',
+            'children',
+            'smoking',
+            'drinking',
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        selected_country = kwargs.get('country', None)
-        selected_city = kwargs.get('city', None)
-
         self.fields['city'].queryset = City.objects.all()
-
-        if selected_city:
-            self.fields['city'].initial = selected_city
-
-        print(selected_city)
-        print(self.fields['city'].initial)
 
     def clean(self):
         cleaned_data = super().clean()

@@ -12,6 +12,10 @@
     const likeButton = document.querySelector('[data-action="like"]');
     const dislikeButton = document.querySelector('[data-action="dislike"]');
     const rewindButton = document.querySelector('[data-action="rewind"]');
+    const activeProfile = document.querySelector('[data-active-profile]');
+    const activeAvatar = document.querySelector('[data-active-avatar]');
+    const activeName = document.querySelector('[data-active-name]');
+    const activeMeta = document.querySelector('[data-active-meta]');
     const lookingForSelect = document.querySelector('[data-looking-for]');
     const minAgeInput = document.querySelector('[data-min-age]');
     const maxAgeInput = document.querySelector('[data-max-age]');
@@ -24,6 +28,7 @@
     const history = [];
     let activeCard = null;
     let pointerStart = null;
+    const defaultAvatar = 'https://placehold.co/96x96?text=L';
 
     function updateResultsCounter() {
         if (resultsCounter) {
@@ -50,6 +55,53 @@
 
         feedback.textContent = '';
         feedback.classList.remove('swipe-feedback--like', 'swipe-feedback--nope');
+    }
+
+    function formatActiveMeta(member) {
+        const parts = [];
+
+        if (member.age) {
+            parts.push(`${member.age} років`);
+        }
+
+        const location = [member.city, member.country].filter(Boolean).join(', ');
+        if (location) {
+            parts.push(location);
+        }
+
+        if (member.gender_display) {
+            parts.push(member.gender_display);
+        }
+
+        return parts.join(' • ');
+    }
+
+    function updateActiveProfile(member) {
+        if (!activeProfile) {
+            return;
+        }
+
+        if (!member) {
+            activeProfile.classList.add('d-none');
+            return;
+        }
+
+        if (activeAvatar) {
+            activeAvatar.src = member.avatar || defaultAvatar;
+            activeAvatar.alt = `${member.name} — аватар`;
+        }
+
+        if (activeName) {
+            activeName.textContent = member.name;
+        }
+
+        if (activeMeta) {
+            const metaText = formatActiveMeta(member);
+            activeMeta.textContent = metaText;
+            activeMeta.classList.toggle('d-none', metaText === '');
+        }
+
+        activeProfile.classList.remove('d-none');
     }
 
     function showFeedback(message, type) {
@@ -187,12 +239,16 @@
 
         activeCard = nextCard || null;
 
+        const activeMember = deck[deck.length - 1] || null;
+
         if (activeCard) {
             activeCard.classList.add('active');
             activeCard.addEventListener('pointerdown', onPointerDown);
         } else {
             clearFeedback();
         }
+
+        updateActiveProfile(activeMember);
     }
 
     function onPointerDown(event) {
@@ -265,6 +321,8 @@
         const card = activeCard;
         const removedMember = deck.pop();
         history.push({ member: removedMember, choice: isLike ? 'like' : 'nope' });
+
+        updateActiveProfile(deck[deck.length - 1] || null);
 
         const direction = isLike ? 1 : -1;
         card.classList.add(isLike ? 'liked' : 'dismissed');
