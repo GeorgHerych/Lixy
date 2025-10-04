@@ -3,7 +3,7 @@ from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Count
@@ -12,6 +12,78 @@ from members.forms import RegisterUserForm, LoginUserForm, ResetPasswordForm, Ed
 from members.models import Member, Country, City
 from posts.helpers.passwordvalidator import is_password_valid
 from posts.helpers.prevpagesession import set_prev_page
+
+
+NOTIFICATION_OPTIONS = [
+    {
+        'id': 'notify-matches',
+        'label': 'Повідомляти про нові збіги',
+        'description': 'Отримуйте сповіщення, коли хтось відповів вам взаємністю.',
+        'checked': True,
+    },
+    {
+        'id': 'notify-messages',
+        'label': 'Надсилати сповіщення про нові повідомлення',
+        'description': 'Дізнавайтеся про нові чати одразу після їх появи.',
+        'checked': True,
+    },
+    {
+        'id': 'notify-recommendations',
+        'label': 'Підказувати нові рекомендації електронною поштою',
+        'description': 'Отримуйте добірки профілів, які можуть вам сподобатися.',
+        'checked': False,
+    },
+]
+
+PRIVACY_OPTIONS = [
+    {
+        'id': 'privacy-mutual',
+        'label': 'Показувати профіль лише для людей із взаємними вподобаннями',
+        'description': 'Ваш профіль побачать лише ті, з ким у вас взаємні лайки.',
+        'checked': True,
+    },
+    {
+        'id': 'privacy-hide-age',
+        'label': 'Приховати вік у публічній частині профілю',
+        'description': 'Вік буде доступний лише вам та вашим збігам.',
+        'checked': False,
+    },
+    {
+        'id': 'privacy-city',
+        'label': 'Відображати ваш населений пункт тільки вашим збігам',
+        'description': 'Ваш населений пункт бачитимуть лише люди, з якими у вас є збіг.',
+        'checked': True,
+    },
+]
+
+COMMUNITY_RULES = [
+    'Поважайте особисті межі та не діліться чужими контактами без дозволу.',
+    'Повідомляйте про підозрілу поведінку — команда підтримки завжди на зв’язку.',
+    'Використовуйте справжні фото та опис, щоб збіги були чесними.',
+]
+
+SUBSCRIPTION_PLANS = [
+    {
+        'name': 'Lixy Plus',
+        'description': 'Додаткові вподобання щодня та перегляд тих, кому ви сподобалися.',
+    },
+    {
+        'name': 'Lixy Premium',
+        'description': 'Необмежені повернення, пріоритет у видачі та детальна аналітика збігів.',
+    },
+]
+
+CURRENT_PLAN = 'Безкоштовний'
+
+
+def _build_settings_context():
+    return {
+        'notification_options': NOTIFICATION_OPTIONS,
+        'privacy_options': PRIVACY_OPTIONS,
+        'community_rules': COMMUNITY_RULES,
+        'subscription_plans': SUBSCRIPTION_PLANS,
+        'current_plan': CURRENT_PLAN,
+    }
 
 
 # Create your views here.
@@ -153,6 +225,7 @@ def profile(request, username):
             'similar': similar_members,
             'top_liked': top_liked_members,
         },
+        'settings_context': _build_settings_context(),
     }
 
     return render(request, 'profile/profile.html', context)
@@ -202,6 +275,66 @@ def discover(request):
     }
 
     return render(request, 'profile/discover.html', context)
+
+
+@login_required(login_url="/members/login")
+def profile_settings_notifications(request, username):
+    member = get_object_or_404(Member, username=username)
+
+    if request.user != member:
+        return redirect('profile', username=member.username)
+
+    context = {
+        'member': member,
+        'settings_context': _build_settings_context(),
+    }
+
+    return render(request, 'profile/settings/notifications.html', context)
+
+
+@login_required(login_url="/members/login")
+def profile_settings_privacy(request, username):
+    member = get_object_or_404(Member, username=username)
+
+    if request.user != member:
+        return redirect('profile', username=member.username)
+
+    context = {
+        'member': member,
+        'settings_context': _build_settings_context(),
+    }
+
+    return render(request, 'profile/settings/privacy.html', context)
+
+
+@login_required(login_url="/members/login")
+def profile_settings_rules(request, username):
+    member = get_object_or_404(Member, username=username)
+
+    if request.user != member:
+        return redirect('profile', username=member.username)
+
+    context = {
+        'member': member,
+        'settings_context': _build_settings_context(),
+    }
+
+    return render(request, 'profile/settings/rules.html', context)
+
+
+@login_required(login_url="/members/login")
+def profile_settings_subscriptions(request, username):
+    member = get_object_or_404(Member, username=username)
+
+    if request.user != member:
+        return redirect('profile', username=member.username)
+
+    context = {
+        'member': member,
+        'settings_context': _build_settings_context(),
+    }
+
+    return render(request, 'profile/settings/subscriptions.html', context)
 
 
 @login_required(login_url="/members/login")

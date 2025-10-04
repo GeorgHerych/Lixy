@@ -15,18 +15,20 @@
                 </div>
                 <p class="text-muted small">Отримуйте лише потрібні вам оновлення, щоб залишатися на зв’язку з людьми, які вам цікаві.</p>
                 <div class="profile-settings__options" role="group" aria-labelledby="notifications">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="notify-matches" checked>
-                        <label class="form-check-label" for="notify-matches">Повідомляти про нові збіги</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="notify-messages" checked>
-                        <label class="form-check-label" for="notify-messages">Надсилати сповіщення про нові повідомлення</label>
-                    </div>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="notify-recommendations">
-                        <label class="form-check-label" for="notify-recommendations">Підказувати нові рекомендації електронною поштою</label>
-                    </div>
+                    {% for option in settings_context.notification_options %}
+                        <div class="form-check form-switch">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="{{ option.id }}"
+                                {% if option.checked %}checked{% endif %}
+                            >
+                            <label class="form-check-label" for="{{ option.id }}">{{ option.label }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="profile-settings__cta">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'profile_settings_notifications' member.username %}">Керувати сповіщеннями</a>
                 </div>
             </div>
         </article>
@@ -38,11 +40,22 @@
                     <h3 class="h5 mb-0">Конфіденційність</h3>
                 </div>
                 <p class="text-muted small">Обирайте, хто може бачити ваш профіль та які дані ви відкриваєте для інших.</p>
-                <ul class="profile-settings__list">
-                    <li>Показувати профіль лише для людей із взаємними вподобаннями.</li>
-                    <li>Приховати вік у публічній частині профілю.</li>
-                    <li>Відображати ваш населений пункт тільки вашим збігам.</li>
-                </ul>
+                <div class="profile-settings__options" role="group" aria-labelledby="privacy">
+                    {% for option in settings_context.privacy_options %}
+                        <div class="form-check form-switch">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="{{ option.id }}"
+                                {% if option.checked %}checked{% endif %}
+                            >
+                            <label class="form-check-label" for="{{ option.id }}">{{ option.label }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="profile-settings__cta">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'profile_settings_privacy' member.username %}">Керувати конфіденційністю</a>
+                </div>
             </div>
         </article>
 
@@ -54,10 +67,13 @@
                 </div>
                 <p class="text-muted small">Пам’ятайте про комфорт і безпеку всіх користувачів — це допомагає будувати здорову спільноту.</p>
                 <ul class="profile-settings__list">
-                    <li>Поважайте особисті межі та не діліться чужими контактами без дозволу.</li>
-                    <li>Повідомляйте про підозрілу поведінку — команда підтримки завжди на зв’язку.</li>
-                    <li>Використовуйте справжні фото та опис, щоб збіги були чесними.</li>
+                    {% for rule in settings_context.community_rules %}
+                        <li>{{ rule }}</li>
+                    {% endfor %}
                 </ul>
+                <div class="profile-settings__cta">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'profile_settings_rules' member.username %}">Дізнатися більше</a>
+                </div>
             </div>
         </article>
 
@@ -69,18 +85,16 @@
                 </div>
                 <p class="text-muted small">Оберіть оптимальний план, щоб бачити більше профілів та отримувати ексклюзивні можливості.</p>
                 <div class="profile-settings__options">
-                    <div>
-                        <h4 class="h6 mb-1">Lixy Plus</h4>
-                        <p class="mb-2 small text-muted">Додаткові вподобання щодня та перегляд тих, кому ви сподобалися.</p>
-                    </div>
-                    <div>
-                        <h4 class="h6 mb-1">Lixy Premium</h4>
-                        <p class="mb-2 small text-muted">Необмежені повернення, пріоритет у видачі та детальна аналітика збігів.</p>
-                    </div>
+                    {% for plan in settings_context.subscription_plans %}
+                        <div>
+                            <h4 class="h6 mb-1">{{ plan.name }}</h4>
+                            <p class="mb-2 small text-muted">{{ plan.description }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
                 <div class="d-flex justify-content-between align-items-center profile-settings__cta">
-                    <span class="fw-semibold">Поточний план: Безкоштовний</span>
-                    <a href="/members/profile/{{ member.username }}#subscriptions" class="btn btn-primary btn-sm">Оновити план</a>
+                    <span class="fw-semibold">Поточний план: {{ settings_context.current_plan }}</span>
+                    <a href="{% url 'profile_settings_subscriptions' member.username %}" class="btn btn-primary btn-sm">Оновити план</a>
                 </div>
             </div>
         </article>

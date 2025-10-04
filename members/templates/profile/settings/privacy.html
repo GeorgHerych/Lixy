@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Конфіденційність{% endblock %}
+
+{% block content %}
+<section class="profile-settings mt-4">
+    <a class="btn btn-link ps-0" href="{% url 'profile' member.username %}">
+        <i class="bi bi-arrow-left"></i>
+        Повернутися до профілю
+    </a>
+
+    <div class="card profile-settings__card mt-3">
+        <div class="card-body">
+            <div class="profile-settings__card-header">
+                <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
+                <h1 class="h4 mb-0">Конфіденційність</h1>
+            </div>
+            <p class="text-muted">Керуйте тим, як вас бачать інші користувачі. Обмежуйте доступ до даних, щоб почуватися комфортно та безпечно.</p>
+            <div class="profile-settings__options" role="group" aria-labelledby="privacy">
+                {% for option in settings_context.privacy_options %}
+                    <div class="form-check form-switch">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="{{ option.id }}"
+                            {% if option.checked %}checked{% endif %}
+                        >
+                        <label class="form-check-label" for="{{ option.id }}">
+                            <span class="fw-semibold">{{ option.label }}</span>
+                            {% if option.description %}
+                                <span class="d-block small text-muted">{{ option.description }}</span>
+                            {% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

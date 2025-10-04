@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Налаштування підписок{% endblock %}
+
+{% block content %}
+<section class="profile-settings mt-4">
+    <a class="btn btn-link ps-0" href="{% url 'profile' member.username %}">
+        <i class="bi bi-arrow-left"></i>
+        Повернутися до профілю
+    </a>
+
+    <div class="card profile-settings__card mt-3">
+        <div class="card-body">
+            <div class="profile-settings__card-header">
+                <i class="bi bi-repeat" aria-hidden="true"></i>
+                <h1 class="h4 mb-0">Налаштування підписок</h1>
+            </div>
+            <p class="text-muted">Оберіть план, який відповідає вашим цілям. Преміум-можливості допомагають отримувати більше збігів та контролювати видимість профілю.</p>
+            <div class="profile-settings__options">
+                {% for plan in settings_context.subscription_plans %}
+                    <div>
+                        <h2 class="h5 mb-1">{{ plan.name }}</h2>
+                        <p class="mb-2 small text-muted">{{ plan.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 profile-settings__cta">
+                <span class="fw-semibold">Поточний план: {{ settings_context.current_plan }}</span>
+                <a class="btn btn-primary btn-sm disabled" role="button" aria-disabled="true">Оновити план (незабаром)</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
