@@ -10,6 +10,8 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
+                {{ form.non_field_errors }}
+
                 <div class="image-upload-container">
                     <label for="id_banner" class="preview-banner">
                         <img id="banner-image" src="{{ form.instance.banner.url }}" alt="Banner Image" class="preview-banner">
@@ -68,6 +70,69 @@
                     <div class="col">
                         <textarea class="form-control" rows="3" name="bio" placeholder="Tell about yourself" >{% if form.instance.bio != None %}{{ form.instance.bio }}{% endif %}</textarea>
                     </div>
+                </div>
+
+                <hr class="my-4">
+                <h5 class="mb-3">Про стосунки</h5>
+                <div class="mb-3">
+                    {{ form.relationship_status }}
+                    {{ form.relationship_status.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.relationship_goal }}
+                    {{ form.relationship_goal.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.sexual_orientation }}
+                    {{ form.sexual_orientation.errors }}
+                </div>
+
+                <h5 class="mb-3 mt-4">Зовнішність</h5>
+                <div class="mb-3">
+                    {{ form.height_cm }}
+                    {{ form.height_cm.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.body_type }}
+                    {{ form.body_type.errors }}
+                </div>
+
+                <h5 class="mb-3 mt-4">Освіта та робота</h5>
+                <div class="mb-3">
+                    {{ form.education_level }}
+                    {{ form.education_level.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.occupation }}
+                    {{ form.occupation.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.company }}
+                    {{ form.company.errors }}
+                </div>
+
+                <h5 class="mb-3 mt-4">Мови та інтереси</h5>
+                <div class="mb-3">
+                    {{ form.languages }}
+                    {{ form.languages.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.interests }}
+                    {{ form.interests.errors }}
+                </div>
+
+                <h5 class="mb-3 mt-4">Звички та сім'я</h5>
+                <div class="mb-3">
+                    {{ form.children }}
+                    {{ form.children.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.smoking }}
+                    {{ form.smoking.errors }}
+                </div>
+                <div class="mb-3">
+                    {{ form.drinking }}
+                    {{ form.drinking.errors }}
                 </div>
 
                 <div class="d-grid gap-4 grid-col-2">

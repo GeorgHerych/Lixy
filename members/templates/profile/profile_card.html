@@ -78,6 +78,66 @@
                     </div>
                 </div>
 
+                {% if member.relationship_status or member.relationship_goal or member.sexual_orientation or member.height_cm or member.body_type or member.education_level or member.occupation or member.company or member.languages or member.interests or member.children or member.smoking or member.drinking %}
+                    <div class="member-details-extended mt-3">
+                        <h6 class="text-uppercase text-muted small mb-2">Додаткова інформація</h6>
+                        <dl class="row gy-2 gx-3 mb-0">
+                            {% if member.relationship_status %}
+                                <dt class="col-sm-5 small text-muted">Сімейний стан</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_relationship_status_display }}</dd>
+                            {% endif %}
+                            {% if member.relationship_goal %}
+                                <dt class="col-sm-5 small text-muted">Мета знайомства</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_relationship_goal_display }}</dd>
+                            {% endif %}
+                            {% if member.sexual_orientation %}
+                                <dt class="col-sm-5 small text-muted">Орієнтація</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_sexual_orientation_display }}</dd>
+                            {% endif %}
+                            {% if member.height_cm %}
+                                <dt class="col-sm-5 small text-muted">Зріст</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.height_cm }} см</dd>
+                            {% endif %}
+                            {% if member.body_type %}
+                                <dt class="col-sm-5 small text-muted">Статура</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_body_type_display }}</dd>
+                            {% endif %}
+                            {% if member.education_level %}
+                                <dt class="col-sm-5 small text-muted">Освіта</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_education_level_display }}</dd>
+                            {% endif %}
+                            {% if member.occupation %}
+                                <dt class="col-sm-5 small text-muted">Професія</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.occupation }}</dd>
+                            {% endif %}
+                            {% if member.company %}
+                                <dt class="col-sm-5 small text-muted">Місце роботи</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.company }}</dd>
+                            {% endif %}
+                            {% if member.languages %}
+                                <dt class="col-sm-5 small text-muted">Мови</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.languages }}</dd>
+                            {% endif %}
+                            {% if member.interests %}
+                                <dt class="col-sm-5 small text-muted">Інтереси</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.interests }}</dd>
+                            {% endif %}
+                            {% if member.children %}
+                                <dt class="col-sm-5 small text-muted">Діти</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_children_display }}</dd>
+                            {% endif %}
+                            {% if member.smoking %}
+                                <dt class="col-sm-5 small text-muted">Куріння</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_smoking_display }}</dd>
+                            {% endif %}
+                            {% if member.drinking %}
+                                <dt class="col-sm-5 small text-muted">Алкоголь</dt>
+                                <dd class="col-sm-7 mb-0">{{ member.get_drinking_display }}</dd>
+                            {% endif %}
+                        </dl>
+                    </div>
+                {% endif %}
+
                 <div class="member-connections">
                     <p class="member-followers-title">Підписники: {{ member.followers.count }}</p>
                     <p class="member-following-title">Підписки: {{ member.followings.count }}</p>

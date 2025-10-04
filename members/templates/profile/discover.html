@@ -35,19 +35,29 @@
             </noscript>
         </div>
 
-        <div class="swipe-actions mt-4 d-flex justify-content-center gap-3">
-            <button type="button" class="btn btn-outline-secondary btn-lg swipe-button" data-action="dislike">
-                <i class="bi bi-x-lg"></i>
-                <span class="ms-2">Пропустити</span>
-            </button>
-            <button type="button" class="btn btn-outline-dark btn-lg swipe-button" data-action="rewind" disabled>
-                <i class="bi bi-arrow-counterclockwise"></i>
-                <span class="ms-2">Повернути</span>
-            </button>
-            <button type="button" class="btn btn-primary btn-lg swipe-button" data-action="like">
-                <i class="bi bi-heart-fill"></i>
-                <span class="ms-2">Вподобати</span>
-            </button>
+        <div class="swipe-actions mt-4">
+            <div class="swipe-active-profile d-none" data-active-profile>
+                <img src="https://placehold.co/96x96?text=L" alt="Активний користувач" class="swipe-active-profile__avatar" data-active-avatar>
+                <div class="swipe-active-profile__info">
+                    <div class="swipe-active-profile__name" data-active-name></div>
+                    <div class="swipe-active-profile__meta text-muted" data-active-meta></div>
+                </div>
+            </div>
+
+            <div class="swipe-actions__buttons d-flex justify-content-center flex-wrap gap-3">
+                <button type="button" class="btn btn-outline-secondary btn-lg swipe-button" data-action="dislike">
+                    <i class="bi bi-x-lg"></i>
+                    <span class="ms-2">Пропустити</span>
+                </button>
+                <button type="button" class="btn btn-outline-dark btn-lg swipe-button" data-action="rewind" disabled>
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    <span class="ms-2">Повернути</span>
+                </button>
+                <button type="button" class="btn btn-primary btn-lg swipe-button" data-action="like">
+                    <i class="bi bi-heart-fill"></i>
+                    <span class="ms-2">Вподобати</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
