@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Діалог{% endblock %}
+
+{% block content %}
+<div class="dialog-page py-4">
+    <div class="card dialog-card">
+        <div class="card-header">
+            <img
+                src="{{ companion.avatar.url }}"
+                alt="{{ companion.get_full_name|default:companion.username }}"
+                class="dialog-header-avatar"
+            />
+            <div class="text-start">
+                <h5 class="mb-0">{{ companion.get_full_name|default:companion.username }}</h5>
+                <small class="text-muted">@{{ companion.username }}</small>
+            </div>
+            <a href="{% url 'profile' companion.username %}" class="btn btn-outline-secondary ms-auto">
+                До профілю
+            </a>
+        </div>
+        <div class="card-body text-start">
+            {% if conversation_preview %}
+                <ul class="dialog-messages">
+                    {% for message in conversation_preview %}
+                        <li class="dialog-message {% if message.is_current_user %}dialog-message-out{% else %}dialog-message-in{% endif %}">
+                            <span class="dialog-message-author">{{ message.author }}</span>
+                            <span class="dialog-message-text">{{ message.text }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted mb-0">Поки що немає повідомлень у цьому діалозі.</p>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <form class="dialog-form">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Напишіть повідомлення..." disabled>
+                    <button class="btn btn-primary" type="button" disabled>Надіслати</button>
+                </div>
+                <small class="text-muted d-block mt-2">Обмін повідомленнями незабаром буде доступний.</small>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -15,6 +15,7 @@ urlpatterns = [
     path('profile/edit-profile/<str:username>', views.edit_profile, name='edit_profile'),
     path('profile/delete-banner/', views.delete_banner, name='delete_banner'),
     path('profile/delete-avatar/', views.delete_avatar, name='delete_avatar'),
+    path('dialogs/<str:username>/', views.dialog_detail, name='dialog_detail'),
     path('edit-profile/get-cities/', views.get_cities, name='get_cities'),
     path('follow/<str:username>', views.follow, name='follow'),
     path('unfollow/<str:username>', views.unfollow, name='unfollow'),

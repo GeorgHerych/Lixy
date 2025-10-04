@@ -410,6 +410,44 @@ def edit_profile(request, username):
     return render(request, 'profile/edit_profile.html', {'form': form, 'member': member})
 
 @login_required(login_url="/members/login")
+def dialog_detail(request, username):
+    companion = get_object_or_404(Member, username=username)
+
+    if companion == request.user:
+        return redirect('profile', username=username)
+
+    is_following = request.user.followings.filter(id=companion.id).exists()
+    is_follower = request.user.followers.filter(id=companion.id).exists()
+
+    if is_following and is_follower:
+        status_message = "У вас взаємна підписка. Чекаємо на ваше перше повідомлення!"
+    elif is_following:
+        status_message = "Ви стежите за користувачем. Напишіть першими, щоб почати діалог."
+    elif is_follower:
+        status_message = "Користувач стежить за вами. Привітайтеся першим!"
+    else:
+        status_message = "Поки що у вас немає підписок одне на одного, але це не заважає розпочати спілкування."
+
+    conversation_preview = [
+        {
+            'author': companion.get_full_name() or companion.username,
+            'text': status_message,
+            'is_current_user': False,
+        }
+    ]
+
+    context = {
+        'companion': companion,
+        'is_following': is_following,
+        'is_follower': is_follower,
+        'conversation_preview': conversation_preview,
+        'status_message': status_message,
+    }
+
+    return render(request, 'profile/dialog_detail.html', context)
+
+
+@login_required(login_url="/members/login")
 def delete_banner(request):
     user = request.user
     member = Member.objects.get(username=user.username)
