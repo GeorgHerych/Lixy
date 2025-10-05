@@ -992,7 +992,7 @@ form {
 .dialog-message-item {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 2px;
 }
 
 .dialog-message-item-in {
@@ -1052,7 +1052,7 @@ form {
     font-size: 0.7rem;
     color: var(--secondary-text-color);
     font-variant-numeric: tabular-nums;
-    margin-top: 4px;
+    margin-top: 0;
 }
 
 .dialog-message-item-in .dialog-message-meta {
