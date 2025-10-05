@@ -871,7 +871,9 @@ form {
     padding: 12px;
     border-radius: 12px;
     background-color: rgba(10, 12, 16, 0.04);
-    max-width: min(100%, 360px);
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 70%;
     box-shadow: 0 1px 2px rgba(10, 12, 16, 0.04);
 }
 
