@@ -29,6 +29,9 @@
                             <li class="nav-item">
                                 <a class="nav-link nav-top-link" aria-current="page" href="/members/profile/{{ user.username }}">Профіль</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-top-link" aria-current="page" href="{% url 'dialog_list' %}">Діалоги</a>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>

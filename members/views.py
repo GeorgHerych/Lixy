@@ -10,6 +10,7 @@ from django.db.models import Count
 
 from members.forms import RegisterUserForm, LoginUserForm, ResetPasswordForm, EditMemberForm
 from members.models import Member, Country, City
+from members.services.dialogs import collect_user_dialogs
 from posts.helpers.passwordvalidator import is_password_valid
 from posts.helpers.prevpagesession import set_prev_page
 
@@ -408,6 +409,18 @@ def edit_profile(request, username):
     form = EditMemberForm(instance=member, initial={'country': country, 'city': city})
 
     return render(request, 'profile/edit_profile.html', {'form': form, 'member': member})
+
+
+@login_required(login_url="/members/login")
+def dialog_list(request):
+    dialogs = collect_user_dialogs(request.user)
+
+    context = {
+        "dialogs": dialogs,
+    }
+
+    return render(request, "profile/dialog_list.html", context)
+
 
 @login_required(login_url="/members/login")
 def dialog_detail(request, username):

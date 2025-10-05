@@ -702,6 +702,7 @@ form {
     font-size: 20px;
     text-align: start;
     justify-content: center;
+    position: relative;
 }
 
 .vertical-nav:hover > ul > li > a {
@@ -764,144 +765,154 @@ form {
     max-width: 180px;
 }
 
-.nav-dialogs {
-    margin-top: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.nav-dialogs-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 0 8px;
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--secondary-text-color);
-    opacity: 0;
-    transform: translateX(-12px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    text-align: left;
-}
-
-.nav-dialogs-counter {
+.nav-counter {
+    position: absolute;
+    top: 6px;
+    right: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 28px;
-    padding: 4px 8px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
     border-radius: 999px;
-    background-color: rgba(234, 235, 241, 0.12);
+    background-color: rgba(234, 235, 241, 0.18);
     color: var(--text-color);
+    font-size: 0.75rem;
     font-weight: 600;
+    line-height: 1;
 }
 
-.nav-dialogs-list {
+.dialog-list-page {
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    text-align: left;
+}
+
+.dialog-list-title {
+    text-align: left;
+}
+
+.dialog-list-subtitle {
+    color: var(--secondary-text-color);
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.dialog-list-counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 48px;
+    padding: 0 12px;
+    border-radius: 16px;
+    background-color: rgba(234, 235, 241, 0.08);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.dialog-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
 }
 
-.nav-dialog-item {
-    position: relative;
+.dialog-list-item {
+    list-style: none;
 }
 
-.nav-dialog-link {
+.dialog-list-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px;
-    border-radius: 12px;
+    gap: 16px;
+    padding: 16px 20px;
+    background-color: var(--card-bg);
+    border: var(--card-border);
+    border-radius: 16px;
     text-decoration: none;
-    background-color: transparent;
-    transition: background-color 0.2s ease;
-    justify-content: center;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
     text-align: left;
 }
 
-.nav-dialog-link:hover {
+.dialog-list-link:hover {
     background-color: rgba(234, 235, 241, 0.08);
 }
 
-.vertical-nav:hover .nav-dialog-link {
-    justify-content: flex-start;
+.dialog-avatar-wrapper {
+    position: relative;
+    display: inline-flex;
 }
 
-.nav-dialog-avatar {
-    width: 40px;
-    height: 40px;
+.dialog-avatar {
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0;
+    border: 2px solid rgba(234, 235, 241, 0.18);
 }
 
-.nav-dialog-meta {
+.dialog-info {
     display: flex;
     flex-direction: column;
+    gap: 6px;
     align-items: flex-start;
-    gap: 4px;
-    opacity: 0;
-    max-width: 0;
-    overflow: hidden;
-    transition: opacity 0.2s ease, max-width 0.2s ease;
-    text-align: left;
 }
 
-.vertical-nav:hover .nav-dialog-meta {
-    opacity: 1;
-    max-width: 180px;
-}
-
-.nav-dialog-name {
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-align: left;
-}
-
-.nav-dialog-preview {
-    font-size: 0.75rem;
-    color: var(--secondary-text-color);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 100%;
-    text-align: left;
-}
-
-.nav-dialogs-title {
-    font-weight: 600;
-}
-
-.nav-dialog-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    color: #ffb347;
+.dialog-name-wrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
 }
 
-.nav-dialog-empty {
-    padding: 8px;
-    border-radius: 12px;
-    background-color: rgba(234, 235, 241, 0.04);
+.dialog-name {
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-align: left;
 }
 
-.nav-dialog-empty-text {
-    font-size: 0.8rem;
+.dialog-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-flex;
+}
+
+.dialog-status-dot.is-online {
+    background-color: #3ddc84;
+}
+
+.dialog-status-dot.is-offline {
+    background-color: #4a4c57;
+}
+
+.dialog-preview {
     color: var(--secondary-text-color);
+    font-size: 0.9rem;
+    text-align: left;
 }
 
-.vertical-nav:hover .nav-dialogs-header {
-    opacity: 1;
-    transform: translateX(0);
+.dialog-empty-state {
+    background-color: var(--card-bg);
+    border: var(--card-border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+}
+
+.dialog-empty-title {
+    margin-bottom: 12px;
+}
+
+.dialog-empty-text {
+    margin-bottom: 20px;
+    color: var(--secondary-text-color);
 }
 
 .dialog-page {

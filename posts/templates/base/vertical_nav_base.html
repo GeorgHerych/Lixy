@@ -22,6 +22,21 @@
             <li class="nav-item">
                 <a
                     class="nav-link"
+                    href="{% url 'dialog_list' %}"
+                    title="Діалоги"
+                    aria-label="Діалоги"
+                >
+                    <i class="bi bi-chat-dots-fill"></i>
+                    <p class="nav-title">Діалоги</p>
+                    {% if user_dialogs %}
+                        <span class="nav-counter" aria-hidden="true">{{ user_dialogs|length }}</span>
+                        <span class="visually-hidden">Непрочитаних діалогів: {{ user_dialogs|length }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a
+                    class="nav-link"
                     aria-current="page"
                     href="/members/profile/{{ user.username }}"
                     title="Профіль"
@@ -33,41 +48,6 @@
             </li>
         {% endif %}
     </ul>
-
-    {% if user.is_authenticated %}
-        <div class="nav-dialogs" aria-label="Список діалогів">
-            <div class="nav-dialogs-header">
-                <span class="nav-dialogs-title">Діалоги</span>
-                {% if user_dialogs %}
-                    <span class="nav-dialogs-counter">{{ user_dialogs|length }}</span>
-                {% endif %}
-            </div>
-            <ul class="nav-dialogs-list">
-                {% if user_dialogs %}
-                    {% for dialog in user_dialogs %}
-                        <li class="nav-dialog-item">
-                            <a class="nav-dialog-link" href="{{ dialog.url }}">
-                                <img src="{{ dialog.avatar }}" alt="{{ dialog.name }}" class="nav-dialog-avatar" />
-                                <div class="nav-dialog-meta">
-                                    <span class="nav-dialog-name">{{ dialog.name }}</span>
-                                    <span class="nav-dialog-preview">{{ dialog.preview }}</span>
-                                </div>
-                            </a>
-                            {% if dialog.is_mutual %}
-                                <span class="nav-dialog-badge" title="Взаємна підписка">
-                                    <i class="bi bi-heart-fill"></i>
-                                </span>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                {% else %}
-                    <li class="nav-dialog-item nav-dialog-empty">
-                        <span class="nav-dialog-empty-text">Поки що немає діалогів.</span>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    {% endif %}
 
     <ul class="navbar-nav nav-bottom">
         {% if user.is_authenticated %}
