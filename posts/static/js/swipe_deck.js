@@ -12,10 +12,6 @@
     const likeButton = document.querySelector('[data-action="like"]');
     const dislikeButton = document.querySelector('[data-action="dislike"]');
     const rewindButton = document.querySelector('[data-action="rewind"]');
-    const activeProfile = document.querySelector('[data-active-profile]');
-    const activeAvatar = document.querySelector('[data-active-avatar]');
-    const activeName = document.querySelector('[data-active-name]');
-    const activeMeta = document.querySelector('[data-active-meta]');
     const lookingForSelect = document.querySelector('[data-looking-for]');
     const minAgeInput = document.querySelector('[data-min-age]');
     const maxAgeInput = document.querySelector('[data-max-age]');
@@ -38,9 +34,9 @@
     let activeCard = null;
     let pointerStart = null;
     let lastFocusedElement = null;
-    const defaultAvatar = 'https://placehold.co/96x96?text=L';
     const defaultCardPhoto = 'https://placehold.co/600x600?text=Lixy';
     const dragThreshold = 6;
+    const supportsPointerEvents = 'PointerEvent' in window;
 
     function updateResultsCounter() {
         if (resultsCounter) {
@@ -67,53 +63,6 @@
 
         feedback.textContent = '';
         feedback.classList.remove('swipe-feedback--like', 'swipe-feedback--nope');
-    }
-
-    function formatActiveMeta(member) {
-        const parts = [];
-
-        if (member.age) {
-            parts.push(`${member.age} років`);
-        }
-
-        const location = [member.city, member.country].filter(Boolean).join(', ');
-        if (location) {
-            parts.push(location);
-        }
-
-        if (member.gender_display) {
-            parts.push(member.gender_display);
-        }
-
-        return parts.join(' • ');
-    }
-
-    function updateActiveProfile(member) {
-        if (!activeProfile) {
-            return;
-        }
-
-        if (!member) {
-            activeProfile.classList.add('d-none');
-            return;
-        }
-
-        if (activeAvatar) {
-            activeAvatar.src = member.avatar || defaultAvatar;
-            activeAvatar.alt = `${member.name} — аватар`;
-        }
-
-        if (activeName) {
-            activeName.textContent = member.name;
-        }
-
-        if (activeMeta) {
-            const metaText = formatActiveMeta(member);
-            activeMeta.textContent = metaText;
-            activeMeta.classList.toggle('d-none', metaText === '');
-        }
-
-        activeProfile.classList.remove('d-none');
     }
 
     function showFeedback(message, type) {
@@ -257,6 +206,8 @@
         cards.forEach((card) => {
             card.classList.remove('active', 'liked', 'dismissed');
             card.removeEventListener('pointerdown', onPointerDown);
+            card.removeEventListener('mousedown', onMouseDown);
+            card.removeEventListener('touchstart', onTouchStart);
             card.tabIndex = -1;
         });
 
@@ -264,21 +215,90 @@
 
         if (activeCard && activeCard !== nextCard) {
             activeCard.removeEventListener('pointerdown', onPointerDown);
+            activeCard.removeEventListener('mousedown', onMouseDown);
+            activeCard.removeEventListener('touchstart', onTouchStart);
         }
 
         activeCard = nextCard || null;
 
-        const activeMember = deck[deck.length - 1] || null;
-
         if (activeCard) {
             activeCard.classList.add('active');
-            activeCard.addEventListener('pointerdown', onPointerDown);
+            if (supportsPointerEvents) {
+                activeCard.addEventListener('pointerdown', onPointerDown);
+            } else {
+                activeCard.addEventListener('mousedown', onMouseDown);
+                activeCard.addEventListener('touchstart', onTouchStart, { passive: false });
+            }
             activeCard.tabIndex = 0;
         } else {
             clearFeedback();
         }
+    }
 
-        updateActiveProfile(activeMember);
+    function startDrag(startX, startY) {
+        if (!activeCard) {
+            return;
+        }
+
+        pointerStart = { x: startX, y: startY };
+        activeCard.dataset.dragging = 'false';
+        activeCard.style.transition = 'none';
+    }
+
+    function handleDragMove(currentX, currentY) {
+        if (!activeCard || !pointerStart) {
+            return;
+        }
+
+        const deltaX = currentX - pointerStart.x;
+        const deltaY = currentY - pointerStart.y;
+        const rotation = deltaX * 0.05;
+
+        if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
+            activeCard.dataset.dragging = 'true';
+        }
+
+        activeCard.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg)`;
+
+        if (Math.abs(deltaX) > 40) {
+            showFeedback(deltaX > 0 ? 'Супер! Свайп вправо' : 'Не моє. Свайп вліво', deltaX > 0 ? 'like' : 'nope');
+        } else {
+            clearFeedback();
+        }
+    }
+
+    function resetActiveCardPosition() {
+        if (!activeCard) {
+            return;
+        }
+
+        activeCard.dataset.dragging = 'false';
+        activeCard.style.transition = 'transform 0.3s ease';
+        activeCard.style.transform = 'translate(0px, 0px) rotate(0deg)';
+        activeCard.addEventListener('transitionend', () => {
+            if (activeCard) {
+                activeCard.style.transition = '';
+            }
+        }, { once: true });
+        clearFeedback();
+    }
+
+    function handleDragEnd(endX) {
+        if (!activeCard || !pointerStart) {
+            return;
+        }
+
+        const deltaX = endX - pointerStart.x;
+        const threshold = activeCard.offsetWidth * 0.35;
+
+        pointerStart = null;
+
+        if (Math.abs(deltaX) > threshold) {
+            finalizeSwipe(deltaX > 0);
+            return;
+        }
+
+        resetActiveCardPosition();
     }
 
     function onPointerDown(event) {
@@ -286,67 +306,85 @@
             return;
         }
 
-        pointerStart = { x: event.clientX, y: event.clientY };
-        activeCard.dataset.dragging = 'false';
+        if (event.pointerType === 'mouse' && event.button !== 0) {
+            return;
+        }
+
+        startDrag(event.clientX, event.clientY);
         activeCard.setPointerCapture(event.pointerId);
-        activeCard.style.transition = 'none';
 
         const onPointerMove = (moveEvent) => {
-            if (!activeCard || !pointerStart) {
-                return;
-            }
-
-            const deltaX = moveEvent.clientX - pointerStart.x;
-            const deltaY = moveEvent.clientY - pointerStart.y;
-            const rotation = deltaX * 0.05;
-
-            if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
-                activeCard.dataset.dragging = 'true';
-            }
-
-            activeCard.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotation}deg)`;
-
-            if (Math.abs(deltaX) > 40) {
-                showFeedback(deltaX > 0 ? 'Супер! Свайп вправо' : 'Не моє. Свайп вліво', deltaX > 0 ? 'like' : 'nope');
-            } else {
-                clearFeedback();
-            }
+            handleDragMove(moveEvent.clientX, moveEvent.clientY);
         };
 
         const onPointerUp = (upEvent) => {
-            if (!activeCard || !pointerStart) {
-                return;
+            if (activeCard) {
+                activeCard.releasePointerCapture(upEvent.pointerId);
+                activeCard.removeEventListener('pointermove', onPointerMove);
+                activeCard.removeEventListener('pointerup', onPointerUp);
+                activeCard.removeEventListener('pointercancel', onPointerUp);
             }
 
-            activeCard.releasePointerCapture(upEvent.pointerId);
-            activeCard.removeEventListener('pointermove', onPointerMove);
-            activeCard.removeEventListener('pointerup', onPointerUp);
-            activeCard.removeEventListener('pointercancel', onPointerUp);
-
-            const deltaX = upEvent.clientX - pointerStart.x;
-            const deltaY = upEvent.clientY - pointerStart.y;
-            const threshold = activeCard.offsetWidth * 0.35;
-
-            pointerStart = null;
-
-            if (Math.abs(deltaX) > threshold) {
-                finalizeSwipe(deltaX > 0);
-            } else {
-                activeCard.dataset.dragging = 'false';
-                activeCard.style.transition = 'transform 0.3s ease';
-                activeCard.style.transform = 'translate(0px, 0px) rotate(0deg)';
-                activeCard.addEventListener('transitionend', () => {
-                    if (activeCard) {
-                        activeCard.style.transition = '';
-                    }
-                }, { once: true });
-                clearFeedback();
-            }
+            handleDragEnd(upEvent.clientX);
         };
 
         activeCard.addEventListener('pointermove', onPointerMove);
         activeCard.addEventListener('pointerup', onPointerUp);
         activeCard.addEventListener('pointercancel', onPointerUp);
+    }
+
+    function onMouseDown(event) {
+        if (!activeCard || event.button !== 0) {
+            return;
+        }
+
+        startDrag(event.clientX, event.clientY);
+
+        const onMouseMove = (moveEvent) => {
+            handleDragMove(moveEvent.clientX, moveEvent.clientY);
+        };
+
+        const onMouseUp = (upEvent) => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            handleDragEnd(upEvent.clientX);
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+        event.preventDefault();
+    }
+
+    function onTouchStart(event) {
+        if (!activeCard || event.touches.length === 0) {
+            return;
+        }
+
+        const touch = event.touches[0];
+        startDrag(touch.clientX, touch.clientY);
+
+        const onTouchMove = (moveEvent) => {
+            const moveTouch = moveEvent.touches[0];
+            if (moveTouch) {
+                handleDragMove(moveTouch.clientX, moveTouch.clientY);
+            }
+            moveEvent.preventDefault();
+        };
+
+        const onTouchEnd = (endEvent) => {
+            document.removeEventListener('touchmove', onTouchMove, { passive: false });
+            document.removeEventListener('touchend', onTouchEnd);
+            document.removeEventListener('touchcancel', onTouchEnd);
+
+            const changedTouch = endEvent.changedTouches[0];
+            const endX = changedTouch ? changedTouch.clientX : touch.clientX;
+            handleDragEnd(endX);
+        };
+
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd);
+        document.addEventListener('touchcancel', onTouchEnd);
+        event.preventDefault();
     }
 
     function finalizeSwipe(isLike) {
@@ -358,7 +396,7 @@
         const removedMember = deck.pop();
         history.push({ member: removedMember, choice: isLike ? 'like' : 'nope' });
 
-        updateActiveProfile(deck[deck.length - 1] || null);
+        pointerStart = null;
 
         const direction = isLike ? 1 : -1;
         card.classList.add(isLike ? 'liked' : 'dismissed');

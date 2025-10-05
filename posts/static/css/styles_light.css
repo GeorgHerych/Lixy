@@ -739,14 +739,19 @@ form {
 }
 
 .dialog-status-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     display: inline-flex;
+    flex-shrink: 0;
+    border: 2px solid #eaebf1;
+    box-shadow: 0 0 0 2px #eaebf1;
+    background-color: #b0b2b8;
 }
 
 .dialog-status-dot.is-online {
-    background-color: #2ecc71;
+    background-color: #22c55e;
+    box-shadow: 0 0 0 2px #eaebf1, 0 0 0 6px rgba(34, 197, 94, 0.3);
 }
 
 .dialog-status-dot.is-offline {

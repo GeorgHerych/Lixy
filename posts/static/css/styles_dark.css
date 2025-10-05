@@ -895,14 +895,19 @@ form {
 }
 
 .dialog-status-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     display: inline-flex;
+    flex-shrink: 0;
+    border: 2px solid var(--card-bg);
+    box-shadow: 0 0 0 2px var(--card-bg);
+    background-color: #4a4c57;
 }
 
 .dialog-status-dot.is-online {
     background-color: #3ddc84;
+    box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 6px rgba(61, 220, 132, 0.35);
 }
 
 .dialog-status-dot.is-offline {
