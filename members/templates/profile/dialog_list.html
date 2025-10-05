@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Діалоги{% endblock %}
+
+{% block content %}
+<div class="dialog-list-page py-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+        <div>
+            <h1 class="dialog-list-title mb-0">Діалоги</h1>
+            <p class="dialog-list-subtitle mb-0">Спілкуйтеся з людьми, з якими вже є контакт.</p>
+        </div>
+        {% if dialogs %}
+            <span class="dialog-list-counter" aria-label="Кількість діалогів">{{ dialogs|length }}</span>
+        {% endif %}
+    </div>
+
+    {% if dialogs %}
+        <ul class="dialog-list" aria-label="Список діалогів">
+            {% for dialog in dialogs %}
+                <li class="dialog-list-item">
+                    <a class="dialog-list-link" href="{{ dialog.url }}">
+                        <span class="dialog-avatar-wrapper">
+                            <img src="{{ dialog.avatar }}" alt="{{ dialog.name }}" class="dialog-avatar" />
+                        </span>
+                        <span class="dialog-info">
+                            <span class="dialog-name-wrapper">
+                                <span class="dialog-name">{{ dialog.name }}</span>
+                                <span class="visually-hidden">
+                                    {% if dialog.is_online %}Онлайн{% else %}Офлайн{% endif %}
+                                </span>
+                                <span class="dialog-status-dot {% if dialog.is_online %}is-online{% else %}is-offline{% endif %}" aria-hidden="true"></span>
+                            </span>
+                            <span class="dialog-preview">{{ dialog.preview_short }}</span>
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="dialog-empty-state">
+            <h2 class="dialog-empty-title">Поки що немає діалогів</h2>
+            <p class="dialog-empty-text">
+                Відвідайте сторінку знайомств, аби знайти цікавих людей, та почніть листування першими.
+            </p>
+            <a class="btn btn-primary" href="/members/discover/">Перейти до знайомств</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
