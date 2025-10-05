@@ -977,6 +977,10 @@ form {
     background-color: rgba(234, 235, 241, 0.04);
 }
 
+.dialog-message-in {
+    align-self: flex-start;
+}
+
 .dialog-message-out {
     align-self: flex-end;
     background-color: rgba(234, 235, 241, 0.12);

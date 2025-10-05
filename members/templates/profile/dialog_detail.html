@@ -20,11 +20,15 @@
             </a>
         </div>
         <div class="card-body text-start">
-            {% if conversation_preview %}
+            <p class="text-muted small">{{ status_message }}</p>
+            {% if conversation_messages %}
                 <ul class="dialog-messages">
-                    {% for message in conversation_preview %}
+                    {% for message in conversation_messages %}
                         <li class="dialog-message {% if message.is_current_user %}dialog-message-out{% else %}dialog-message-in{% endif %}">
-                            <span class="dialog-message-author">{{ message.author }}</span>
+                            <span class="dialog-message-author">
+                                {{ message.author }}
+                                <small class="text-muted ms-2">{{ message.created_at|date:"H:i" }}</small>
+                            </span>
                             <span class="dialog-message-text">{{ message.text }}</span>
                         </li>
                     {% endfor %}
@@ -34,13 +38,17 @@
             {% endif %}
         </div>
         <div class="card-footer">
-            <form class="dialog-form" method="post" action="#">
+            <form class="dialog-form" method="post" action="{% url 'dialog_detail' companion.username %}">
                 {% csrf_token %}
                 <div class="input-group">
-                    <input type="text" name="message" class="form-control" placeholder="Напишіть повідомлення...">
-                    <button class="btn btn-primary" type="button" disabled>Надіслати</button>
+                    {{ message_form.text }}
+                    <button class="btn btn-primary" type="submit">Надіслати</button>
                 </div>
-                <small class="text-muted d-block mt-2">Обмін повідомленнями незабаром буде доступний.</small>
+                {% if message_form.errors %}
+                    <div class="text-danger small mt-2">
+                        {{ message_form.errors.text|join:', ' }}
+                    </div>
+                {% endif %}
             </form>
         </div>
     </div>
