@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from django.urls import reverse
 from django.utils import timezone
+from django.db.models import Q
 
-from members.models import Member
+from members.models import Member, DialogMessage
 
 
 DIALOG_PREVIEW_MUTUAL = "Взаємна симпатія — напишіть повідомлення!"
@@ -20,7 +21,14 @@ def _get_avatar_url(member: Member) -> str:
     return "/media/avatars/default/default_avatar_light.png"
 
 
-def _build_preview(is_mutual: bool) -> str:
+def _build_preview(is_mutual: bool, last_message: Optional[DialogMessage], user: Member) -> str:
+    if last_message is not None:
+        if last_message.sender_id == user.id:
+            author_label = "Ви"
+        else:
+            author_label = last_message.sender.get_full_name() or last_message.sender.username
+        return f"{author_label}: {last_message.text}"
+
     if is_mutual:
         return DIALOG_PREVIEW_MUTUAL
     return DIALOG_PREVIEW_FIRST_MESSAGE
@@ -47,7 +55,16 @@ def collect_user_dialogs(user: Member) -> List[Dict[str, object]]:
 
     for companion in followings:
         is_mutual = companion.id in follower_ids
-        preview = _build_preview(is_mutual)
+        last_message = (
+            DialogMessage.objects.filter(
+                Q(sender=user, recipient=companion)
+                | Q(sender=companion, recipient=user)
+            )
+            .select_related("sender")
+            .order_by("-created_at")
+            .first()
+        )
+        preview = _build_preview(is_mutual, last_message, user)
         last_login = companion.last_login
         is_online = bool(last_login and now - last_login <= online_threshold)
         full_name = companion.get_full_name() or companion.username
@@ -62,6 +79,7 @@ def collect_user_dialogs(user: Member) -> List[Dict[str, object]]:
                 "url": reverse("dialog_detail", args=[companion.username]),
                 "is_mutual": is_mutual,
                 "is_online": is_online,
+                "last_message_at": getattr(last_message, "created_at", None),
             }
         )
 

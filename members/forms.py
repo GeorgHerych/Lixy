@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
 
-from members.models import LoginMember, ResetPassword, Member, Country, City
+from members.models import LoginMember, ResetPassword, Member, Country, City, DialogMessage
 
 
 # class BaseMemberCreationForm(BaseUserCreationForm):
@@ -192,3 +192,28 @@ class EditMemberForm(forms.ModelForm):
     #         member.save()
     #
     #     return member
+
+
+class DialogMessageForm(forms.ModelForm):
+    text = forms.CharField(
+        label="",
+        max_length=1000,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Напишіть повідомлення…",
+                "autocomplete": "off",
+            }
+        ),
+    )
+
+    class Meta:
+        model = DialogMessage
+        fields = ("text",)
+
+    def clean_text(self):
+        text = self.cleaned_data.get("text", "")
+        text = text.strip()
+        if not text:
+            raise forms.ValidationError("Повідомлення не може бути порожнім.")
+        return text

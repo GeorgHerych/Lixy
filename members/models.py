@@ -112,3 +112,30 @@ class Member(AbstractUser):
     children = models.CharField(max_length=32, choices=CHILDREN_PREFERENCES, null=True, blank=True)
     smoking = models.CharField(max_length=32, choices=HABITS, null=True, blank=True)
     drinking = models.CharField(max_length=32, choices=HABITS, null=True, blank=True)
+
+
+class DialogMessage(models.Model):
+    sender = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        related_name="sent_messages",
+    )
+    recipient = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        related_name="received_messages",
+    )
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        indexes = [
+            models.Index(fields=["sender", "recipient", "created_at"]),
+        ]
+
+    def __str__(self) -> str:
+        preview = self.text[:30]
+        if len(self.text) > 30:
+            preview += "…"
+        return f"{self.sender} → {self.recipient}: {preview}"

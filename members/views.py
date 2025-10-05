@@ -6,10 +6,16 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.db.models import Count
+from django.db.models import Count, Q
 
-from members.forms import RegisterUserForm, LoginUserForm, ResetPasswordForm, EditMemberForm
-from members.models import Member, Country, City
+from members.forms import (
+    RegisterUserForm,
+    LoginUserForm,
+    ResetPasswordForm,
+    EditMemberForm,
+    DialogMessageForm,
+)
+from members.models import Member, Country, City, DialogMessage
 from members.services.dialogs import collect_user_dialogs
 from posts.helpers.passwordvalidator import is_password_valid
 from posts.helpers.prevpagesession import set_prev_page
@@ -432,6 +438,17 @@ def dialog_detail(request, username):
     is_following = request.user.followings.filter(id=companion.id).exists()
     is_follower = request.user.followers.filter(id=companion.id).exists()
 
+    if request.method == "POST":
+        message_form = DialogMessageForm(request.POST)
+        if message_form.is_valid():
+            message = message_form.save(commit=False)
+            message.sender = request.user
+            message.recipient = companion
+            message.save()
+            return redirect('dialog_detail', username=companion.username)
+    else:
+        message_form = DialogMessageForm()
+
     if is_following and is_follower:
         status_message = "У вас взаємна підписка. Чекаємо на ваше перше повідомлення!"
     elif is_following:
@@ -441,20 +458,32 @@ def dialog_detail(request, username):
     else:
         status_message = "Поки що у вас немає підписок одне на одного, але це не заважає розпочати спілкування."
 
-    conversation_preview = [
+    conversation_qs = (
+        DialogMessage.objects.filter(
+            Q(sender=request.user, recipient=companion)
+            | Q(sender=companion, recipient=request.user)
+        )
+        .select_related("sender")
+        .order_by("created_at")
+    )
+
+    conversation_messages = [
         {
-            'author': companion.get_full_name() or companion.username,
-            'text': status_message,
-            'is_current_user': False,
+            'author': message.sender.get_full_name() or message.sender.username,
+            'text': message.text,
+            'created_at': message.created_at,
+            'is_current_user': message.sender_id == request.user.id,
         }
+        for message in conversation_qs
     ]
 
     context = {
         'companion': companion,
         'is_following': is_following,
         'is_follower': is_follower,
-        'conversation_preview': conversation_preview,
+        'conversation_messages': conversation_messages,
         'status_message': status_message,
+        'message_form': message_form,
     }
 
     return render(request, 'profile/dialog_detail.html', context)
