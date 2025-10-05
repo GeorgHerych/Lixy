@@ -632,6 +632,23 @@ form {
     text-align: left;
 }
 
+.dialog-list-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.dialog-list-header .dialog-list-title,
+.dialog-list-header .dialog-list-subtitle {
+    text-align: center;
+}
+
+.dialog-list-header .dialog-list-counter {
+    margin-top: 4px;
+}
+
 .dialog-list-title {
     text-align: left;
 }
