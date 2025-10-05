@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date, timedelta
+from itertools import groupby
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -7,6 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Count, Q
+from django.utils import timezone
+from django.utils.formats import date_format
 
 from members.forms import (
     RegisterUserForm,
@@ -467,15 +470,60 @@ def dialog_detail(request, username):
         .order_by("created_at")
     )
 
-    conversation_messages = [
-        {
-            'author': message.sender.get_full_name() or message.sender.username,
-            'text': message.text,
-            'created_at': message.created_at,
-            'is_current_user': message.sender_id == request.user.id,
-        }
-        for message in conversation_qs
-    ]
+    conversation_qs.filter(
+        recipient=request.user,
+        read_at__isnull=True,
+    ).update(read_at=timezone.now())
+
+    conversation_list = list(conversation_qs)
+
+    today = timezone.localdate()
+    yesterday = today - timedelta(days=1)
+
+    conversation_messages = []
+
+    for message_date, messages in groupby(
+        conversation_list,
+        key=lambda message: timezone.localtime(message.created_at).date(),
+    ):
+        if message_date == today:
+            date_label = "Сьогодні"
+        elif message_date == yesterday:
+            date_label = "Вчора"
+        else:
+            date_label = date_format(message_date, "j E Y")
+
+        day_messages = []
+
+        for message in messages:
+            created_local = timezone.localtime(message.created_at)
+            read_local = (
+                timezone.localtime(message.read_at)
+                if message.read_at
+                else None
+            )
+
+            day_messages.append(
+                {
+                    "author": message.sender.get_full_name()
+                    or message.sender.username,
+                    "text": message.text,
+                    "time_display": created_local.strftime("%H:%M"),
+                    "is_current_user": message.sender_id == request.user.id,
+                    "is_read": message.read_at is not None,
+                    "read_display": read_local.strftime("%H:%M")
+                    if read_local
+                    else None,
+                }
+            )
+
+        conversation_messages.append(
+            {
+                "date": message_date,
+                "date_display": date_label,
+                "messages": day_messages,
+            }
+        )
 
     context = {
         'companion': companion,

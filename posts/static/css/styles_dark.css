@@ -964,30 +964,77 @@ form {
     padding: 0;
     display: flex;
     flex-direction: column;
+    gap: 16px;
+}
+
+.dialog-date-separator {
+    display: flex;
+    align-items: center;
     gap: 12px;
+    color: var(--secondary-text-color);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dialog-date-separator::before,
+.dialog-date-separator::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: rgba(234, 235, 241, 0.16);
+}
+
+.dialog-date-separator span {
+    white-space: nowrap;
+}
+
+.dialog-message-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dialog-message-item-in {
+    align-items: flex-start;
+}
+
+.dialog-message-item-out {
+    align-items: flex-end;
+}
+
+.dialog-message-main {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 100%;
+}
+
+.dialog-message-main-in {
+    justify-content: flex-start;
+}
+
+.dialog-message-main-out {
+    justify-content: flex-end;
 }
 
 .dialog-message {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: 4px;
     padding: 12px;
     border-radius: 12px;
     background-color: rgba(234, 235, 241, 0.04);
-}
-
-.dialog-message-in {
-    align-self: flex-start;
+    max-width: min(100%, 360px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .dialog-message-out {
-    align-self: flex-end;
     background-color: rgba(234, 235, 241, 0.12);
 }
 
 .dialog-message-author {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--secondary-text-color);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -996,6 +1043,33 @@ form {
 .dialog-message-text {
     font-size: 0.95rem;
     text-align: left;
+    color: var(--text-color);
+    word-break: break-word;
+}
+
+.dialog-message-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--secondary-text-color);
+    font-variant-numeric: tabular-nums;
+}
+
+.dialog-message-meta i {
+    font-size: 0.85rem;
+    color: inherit;
+}
+
+.dialog-message-time {
+    display: inline-flex;
+    align-items: center;
+}
+
+.dialog-message-read {
+    font-size: 0.75rem;
+    color: var(--secondary-text-color);
+    font-variant-numeric: tabular-nums;
 }
 
 .dialog-card .card-footer {
