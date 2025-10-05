@@ -130,14 +130,12 @@ def register_user(request):
 
         if form.is_valid():
             form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            member = authenticate(username=username, password=password)
-            login(request, member)
 
-            messages.success(request, "Registration Successful.")
+            messages.success(request, "Ви успішно зареєструвалися. Тепер увійдіть до свого акаунту.")
 
-            return redirect('/')
+            return redirect('login')
+
+        return render(request, 'authenticate/register.html', {'form': form})
 
     form = RegisterUserForm()
 
