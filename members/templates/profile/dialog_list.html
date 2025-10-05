@@ -4,11 +4,9 @@
 
 {% block content %}
 <div class="dialog-list-page py-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
-        <div>
-            <h1 class="dialog-list-title mb-0">Діалоги</h1>
-            <p class="dialog-list-subtitle mb-0">Спілкуйтеся з людьми, з якими вже є контакт.</p>
-        </div>
+    <div class="dialog-list-header mb-4">
+        <h1 class="dialog-list-title mb-0">Діалоги</h1>
+        <p class="dialog-list-subtitle mb-0">Спілкуйтеся з людьми, з якими вже є контакт.</p>
         {% if dialogs %}
             <span class="dialog-list-counter" aria-label="Кількість діалогів">{{ dialogs|length }}</span>
         {% endif %}

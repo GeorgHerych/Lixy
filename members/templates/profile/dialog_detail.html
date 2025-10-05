@@ -34,9 +34,10 @@
             {% endif %}
         </div>
         <div class="card-footer">
-            <form class="dialog-form">
+            <form class="dialog-form" method="post" action="#">
+                {% csrf_token %}
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Напишіть повідомлення..." disabled>
+                    <input type="text" name="message" class="form-control" placeholder="Напишіть повідомлення...">
                     <button class="btn btn-primary" type="button" disabled>Надіслати</button>
                 </div>
                 <small class="text-muted d-block mt-2">Обмін повідомленнями незабаром буде доступний.</small>
