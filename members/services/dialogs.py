@@ -5,7 +5,7 @@ from typing import Dict, List, Optional, Set
 
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from members.models import Member, DialogMessage
 
@@ -83,6 +83,15 @@ def collect_user_dialogs(user: Member) -> List[Dict[str, object]]:
         ),
     )
 
+    unread_counts = {
+        entry["sender_id"]: entry["count"]
+        for entry in (
+            DialogMessage.objects.filter(recipient=user, read_at__isnull=True)
+            .values("sender_id")
+            .annotate(count=Count("id"))
+        )
+    }
+
     recent_messages = {}
     for message in (
         DialogMessage.objects.filter(Q(sender=user) | Q(recipient=user))
@@ -116,6 +125,7 @@ def collect_user_dialogs(user: Member) -> List[Dict[str, object]]:
                 "is_mutual": is_mutual,
                 "is_online": is_online,
                 "last_message_at": getattr(last_message, "created_at", None),
+                "unread_count": unread_counts.get(companion.id, 0),
             }
         )
 
