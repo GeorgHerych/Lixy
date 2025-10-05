@@ -191,11 +191,17 @@
     flex-direction: column;
     gap: 0;
     pointer-events: none;
+    user-select: none;
+    touch-action: pan-y;
 }
 
 .profile-card.active {
     pointer-events: auto;
-    cursor: pointer;
+    cursor: grab;
+}
+
+.profile-card.active[data-dragging="true"] {
+    cursor: grabbing;
 }
 
 .profile-card__photo {
@@ -328,33 +334,6 @@
 .swipe-actions__buttons .swipe-button[data-action="like"] i,
 .swipe-actions__buttons .swipe-button[data-action="like"] span {
     color: inherit;
-}
-
-.swipe-active-profile {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 1rem;
-    border-radius: 999px;
-    background: var(--bs-body-bg);
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
-}
-
-.swipe-active-profile__avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid rgba(99, 102, 241, 0.3);
-}
-
-.swipe-active-profile__name {
-    font-weight: 600;
-    font-size: 1.05rem;
-}
-
-.swipe-active-profile__meta {
-    font-size: 0.9rem;
 }
 
 .swipe-feedback {
