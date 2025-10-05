@@ -28,9 +28,9 @@
                 >
                     <i class="bi bi-chat-dots-fill"></i>
                     <p class="nav-title">Діалоги</p>
-                    {% if user_dialogs %}
-                        <span class="nav-counter" aria-hidden="true">{{ user_dialogs|length }}</span>
-                        <span class="visually-hidden">Непрочитаних діалогів: {{ user_dialogs|length }}</span>
+                    {% if user_unread_dialogs_count %}
+                        <span class="nav-counter" aria-hidden="true">{{ user_unread_dialogs_count }}</span>
+                        <span class="visually-hidden">Непрочитаних діалогів: {{ user_unread_dialogs_count }}</span>
                     {% endif %}
                 </a>
             </li>
