@@ -25,12 +25,17 @@
                     href="{% url 'dialog_list' %}"
                     title="Діалоги"
                     aria-label="Діалоги"
+                    data-dialog-link
                 >
                     <i class="bi bi-chat-dots-fill"></i>
                     <p class="nav-title">Діалоги</p>
                     {% if user_unread_dialogs_count %}
-                        <span class="nav-counter" aria-hidden="true">{{ user_unread_dialogs_count }}</span>
-                        <span class="visually-hidden">Непрочитаних діалогів: {{ user_unread_dialogs_count }}</span>
+                        <span class="nav-counter" aria-hidden="true" data-dialog-unread-counter>
+                            {{ user_unread_dialogs_count }}
+                        </span>
+                        <span class="visually-hidden" data-dialog-unread-label>
+                            Непрочитаних діалогів: {{ user_unread_dialogs_count }}
+                        </span>
                     {% endif %}
                 </a>
             </li>

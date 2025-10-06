@@ -11,6 +11,76 @@
         return element;
     }
 
+    function selectDialogNavLink() {
+        return document.querySelector('[data-dialog-link]');
+    }
+
+    function parseCounterValue(textContent) {
+        const parsed = Number.parseInt(String(textContent || '').trim(), 10);
+        return Number.isNaN(parsed) ? 0 : parsed;
+    }
+
+    function ensureNavCounter(link) {
+        let counter = link.querySelector('[data-dialog-unread-counter]');
+        if (!counter) {
+            counter = document.createElement('span');
+            counter.className = 'nav-counter';
+            counter.setAttribute('aria-hidden', 'true');
+            counter.dataset.dialogUnreadCounter = 'true';
+            link.appendChild(counter);
+        }
+        return counter;
+    }
+
+    function ensureNavLabel(link) {
+        let label = link.querySelector('[data-dialog-unread-label]');
+        if (!label) {
+            label = document.createElement('span');
+            label.className = 'visually-hidden';
+            label.dataset.dialogUnreadLabel = 'true';
+            link.appendChild(label);
+        }
+        return label;
+    }
+
+    function setDialogNavUnreadCount(count) {
+        const link = selectDialogNavLink();
+        if (!link) {
+            return;
+        }
+
+        const normalizedCount = Math.max(0, Number(count) || 0);
+        if (normalizedCount === 0) {
+            const counter = link.querySelector('[data-dialog-unread-counter]');
+            const label = link.querySelector('[data-dialog-unread-label]');
+            if (counter) {
+                counter.remove();
+            }
+            if (label) {
+                label.remove();
+            }
+            return;
+        }
+
+        const counter = ensureNavCounter(link);
+        counter.textContent = String(normalizedCount);
+
+        const label = ensureNavLabel(link);
+        label.textContent = `Непрочитаних діалогів: ${normalizedCount}`;
+    }
+
+    function adjustDialogNavUnreadCount(delta) {
+        const link = selectDialogNavLink();
+        if (!link) {
+            return;
+        }
+
+        const counter = link.querySelector('[data-dialog-unread-counter]');
+        const current = counter ? parseCounterValue(counter.textContent) : 0;
+        const next = Math.max(0, current + Number(delta || 0));
+        setDialogNavUnreadCount(next);
+    }
+
     function ensureDateSeparator(listElement, date, dateDisplay) {
         const selector = `.dialog-date-separator[data-date="${date}"]`;
         let separator = listElement.querySelector(selector);
@@ -191,6 +261,14 @@
         const pendingReadIds = new Set();
         let socketOpen = false;
 
+        function hasUnreadMessagesForDialog() {
+            return Boolean(
+                messagesList.querySelector(
+                    '.dialog-message-item[data-is-current-user="false"][data-is-read="false"]',
+                ),
+            );
+        }
+
         function sendPendingReadIds() {
             if (!socketOpen || pendingReadIds.size === 0) {
                 return;
@@ -232,7 +310,9 @@
             return element;
         }
 
-        function updateReadState(messageIds, readDisplay) {
+        function updateReadState(messageIds, readDisplay, readerId) {
+            const hadUnreadBefore = hasUnreadMessagesForDialog();
+
             messageIds.forEach((id) => {
                 const item = messagesList.querySelector(
                     `.dialog-message-item[data-message-id="${id}"]`,
@@ -259,6 +339,12 @@
                     readLabel.textContent = readDisplay ? `прочитано ${readDisplay}` : 'прочитано';
                 }
             });
+
+            const hasUnreadAfter = hasUnreadMessagesForDialog();
+
+            if (Number(readerId) === currentUserId && hadUnreadBefore && !hasUnreadAfter) {
+                adjustDialogNavUnreadCount(-1);
+            }
         }
 
         websocket.addEventListener('open', () => {
@@ -281,7 +367,11 @@
             if (payload.event === 'new' && payload.message) {
                 handleNewMessage(payload.message);
             } else if (payload.event === 'read' && Array.isArray(payload.message_ids)) {
-                updateReadState(payload.message_ids.map(Number), payload.read_display || '');
+                updateReadState(
+                    payload.message_ids.map(Number),
+                    payload.read_display || '',
+                    payload.reader_id,
+                );
             }
         });
 
