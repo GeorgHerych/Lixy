@@ -317,20 +317,35 @@
             handleDragMove(moveEvent.clientX, moveEvent.clientY);
         };
 
-        const onPointerUp = (upEvent) => {
-            if (activeCard) {
-                activeCard.releasePointerCapture(upEvent.pointerId);
-                activeCard.removeEventListener('pointermove', onPointerMove);
-                activeCard.removeEventListener('pointerup', onPointerUp);
-                activeCard.removeEventListener('pointercancel', onPointerUp);
+        const cleanup = (pointerEvent) => {
+            if (!activeCard) {
+                return;
             }
 
+            if (pointerEvent && typeof pointerEvent.pointerId === 'number'
+                && activeCard.hasPointerCapture(pointerEvent.pointerId)) {
+                activeCard.releasePointerCapture(pointerEvent.pointerId);
+            }
+
+            activeCard.removeEventListener('pointermove', onPointerMove);
+            activeCard.removeEventListener('pointerup', onPointerUp);
+            activeCard.removeEventListener('pointercancel', onPointerCancel);
+        };
+
+        const onPointerUp = (upEvent) => {
+            cleanup(upEvent);
             handleDragEnd(upEvent.clientX);
+        };
+
+        const onPointerCancel = (cancelEvent) => {
+            cleanup(cancelEvent);
+            pointerStart = null;
+            resetActiveCardPosition();
         };
 
         activeCard.addEventListener('pointermove', onPointerMove);
         activeCard.addEventListener('pointerup', onPointerUp);
-        activeCard.addEventListener('pointercancel', onPointerUp);
+        activeCard.addEventListener('pointercancel', onPointerCancel);
     }
 
     function onMouseDown(event) {
@@ -363,6 +378,12 @@
         const touch = event.touches[0];
         startDrag(touch.clientX, touch.clientY);
 
+        const endTouchDrag = () => {
+            document.removeEventListener('touchmove', onTouchMove, { passive: false });
+            document.removeEventListener('touchend', onTouchEnd);
+            document.removeEventListener('touchcancel', onTouchCancel);
+        };
+
         const onTouchMove = (moveEvent) => {
             const moveTouch = moveEvent.touches[0];
             if (moveTouch) {
@@ -372,18 +393,21 @@
         };
 
         const onTouchEnd = (endEvent) => {
-            document.removeEventListener('touchmove', onTouchMove, { passive: false });
-            document.removeEventListener('touchend', onTouchEnd);
-            document.removeEventListener('touchcancel', onTouchEnd);
-
+            endTouchDrag();
             const changedTouch = endEvent.changedTouches[0];
             const endX = changedTouch ? changedTouch.clientX : touch.clientX;
             handleDragEnd(endX);
         };
 
+        const onTouchCancel = () => {
+            endTouchDrag();
+            pointerStart = null;
+            resetActiveCardPosition();
+        };
+
         document.addEventListener('touchmove', onTouchMove, { passive: false });
         document.addEventListener('touchend', onTouchEnd);
-        document.addEventListener('touchcancel', onTouchEnd);
+        document.addEventListener('touchcancel', onTouchCancel);
         event.preventDefault();
     }
 
