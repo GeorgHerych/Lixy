@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block title %}Діалог{% endblock %}
 
@@ -21,41 +22,56 @@
         </div>
         <div class="card-body text-start">
             <p class="text-muted small">{{ status_message }}</p>
-            {% if conversation_messages %}
-                <ul class="dialog-messages">
-                    {% for day in conversation_messages %}
-                        <li class="dialog-date-separator" aria-label="Повідомлення за {{ day.date_display }}">
-                            <span>{{ day.date_display }}</span>
-                        </li>
-                        {% for message in day.messages %}
-                            <li class="dialog-message-item {% if message.is_current_user %}dialog-message-item-out{% else %}dialog-message-item-in{% endif %}">
-                                <div class="dialog-message-main {% if message.is_current_user %}dialog-message-main-out{% else %}dialog-message-main-in{% endif %}">
-                                    <div class="dialog-message {% if message.is_current_user %}dialog-message-out{% else %}dialog-message-in{% endif %}">
-                                        <span class="dialog-message-author">{{ message.author }}</span>
-                                        <span class="dialog-message-text">{{ message.text }}</span>
-                                    </div>
+            <ul
+                class="dialog-messages"
+                data-current-user-id="{{ request.user.id }}"
+                data-companion-id="{{ companion.id }}"
+                data-companion-username="{{ companion.username }}"
+            >
+                {% for day in conversation_messages %}
+                    <li
+                        class="dialog-date-separator"
+                        data-date="{{ day.date }}"
+                        aria-label="Повідомлення за {{ day.date_display }}"
+                    >
+                        <span>{{ day.date_display }}</span>
+                    </li>
+                    {% for message in day.messages %}
+                        <li
+                            class="dialog-message-item {% if message.is_current_user %}dialog-message-item-out{% else %}dialog-message-item-in{% endif %}"
+                            data-message-id="{{ message.id }}"
+                            data-sender-id="{{ message.sender_id }}"
+                            data-is-current-user="{{ message.is_current_user|yesno:'true,false' }}"
+                            data-is-read="{{ message.is_read|yesno:'true,false' }}"
+                            data-read-display="{{ message.read_display|default:'' }}"
+                        >
+                            <div class="dialog-message-main {% if message.is_current_user %}dialog-message-main-out{% else %}dialog-message-main-in{% endif %}">
+                                <div class="dialog-message {% if message.is_current_user %}dialog-message-out{% else %}dialog-message-in{% endif %}">
+                                    <span class="dialog-message-author">{{ message.author }}</span>
+                                    <span class="dialog-message-text">{{ message.text }}</span>
                                 </div>
-                                <div class="dialog-message-meta {% if message.is_current_user %}dialog-message-meta-out{% else %}dialog-message-meta-in{% endif %}">
-                                    <span class="dialog-message-time">{{ message.time_display }}</span>
-                                    {% if message.is_current_user %}
-                                        <i class="bi {% if message.is_read %}bi-check-all{% else %}bi-check{% endif %}" aria-hidden="true"></i>
-                                        <span class="visually-hidden">
-                                            {% if message.is_read %}
-                                                Повідомлення прочитано
-                                            {% else %}
-                                                Повідомлення надіслано
-                                            {% endif %}
-                                        </span>
-                                    {% endif %}
-                                </div>
-                                {% if message.is_current_user and message.is_read %}
-                                    <div class="dialog-message-read">прочитано {{ message.read_display }}</div>
+                            </div>
+                            <div class="dialog-message-meta {% if message.is_current_user %}dialog-message-meta-out{% else %}dialog-message-meta-in{% endif %}">
+                                <span class="dialog-message-time">{{ message.time_display }}</span>
+                                {% if message.is_current_user %}
+                                    <i class="bi {% if message.is_read %}bi-check-all{% else %}bi-check{% endif %}" aria-hidden="true"></i>
+                                    <span class="visually-hidden">
+                                        {% if message.is_read %}
+                                            Повідомлення прочитано
+                                        {% else %}
+                                            Повідомлення надіслано
+                                        {% endif %}
+                                    </span>
                                 {% endif %}
-                            </li>
-                        {% endfor %}
+                            </div>
+                            {% if message.is_current_user and message.is_read %}
+                                <div class="dialog-message-read">прочитано {{ message.read_display }}</div>
+                            {% endif %}
+                        </li>
                     {% endfor %}
-                </ul>
-            {% else %}
+                {% endfor %}
+            </ul>
+            {% if not conversation_messages %}
                 <p class="text-muted mb-0">Поки що немає повідомлень у цьому діалозі.</p>
             {% endif %}
         </div>
@@ -66,13 +82,18 @@
                     {{ message_form.text }}
                     <button class="btn btn-primary" type="submit">Надіслати</button>
                 </div>
-                {% if message_form.errors %}
-                    <div class="text-danger small mt-2">
+                <div class="dialog-form-errors text-danger small mt-2">
+                    {% if message_form.errors %}
                         {{ message_form.errors.text|join:', ' }}
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+    {{ block.super }}
+    <script src="{% static 'members/js/dialog.js' %}"></script>
 {% endblock %}
