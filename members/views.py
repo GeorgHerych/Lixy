@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 from itertools import groupby
 
 from django.contrib.auth.decorators import login_required
@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.utils import timezone
-from django.utils.formats import date_format
 
 from members.forms import (
     RegisterUserForm,
@@ -19,6 +18,11 @@ from members.forms import (
     DialogMessageForm,
 )
 from members.models import Member, Country, City, DialogMessage
+from members.services.dialog_realtime import (
+    broadcast_messages_read,
+    broadcast_new_message,
+    build_message_payload,
+)
 from members.services.dialogs import collect_user_dialogs
 from posts.helpers.passwordvalidator import is_password_valid
 from posts.helpers.prevpagesession import set_prev_page
@@ -439,6 +443,8 @@ def dialog_detail(request, username):
     is_following = request.user.followings.filter(id=companion.id).exists()
     is_follower = request.user.followers.filter(id=companion.id).exists()
 
+    is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
     if request.method == "POST":
         message_form = DialogMessageForm(request.POST)
         if message_form.is_valid():
@@ -446,7 +452,18 @@ def dialog_detail(request, username):
             message.sender = request.user
             message.recipient = companion
             message.save()
+            broadcast_new_message(message)
+            if is_ajax:
+                return JsonResponse({"status": "ok"})
             return redirect('dialog_detail', username=companion.username)
+        if is_ajax:
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "errors": message_form.errors.get_json_data(),
+                },
+                status=400,
+            )
     else:
         message_form = DialogMessageForm()
 
@@ -468,57 +485,33 @@ def dialog_detail(request, username):
         .order_by("created_at")
     )
 
-    conversation_qs.filter(
+    unread_qs = conversation_qs.filter(
         recipient=request.user,
         read_at__isnull=True,
-    ).update(read_at=timezone.now())
+    )
+    unread_ids = list(unread_qs.values_list("id", flat=True))
+    if unread_ids:
+        read_at = timezone.now()
+        unread_qs.update(read_at=read_at)
+        broadcast_messages_read(request.user.id, companion.id, unread_ids, read_at)
 
     conversation_list = list(conversation_qs)
 
-    today = timezone.localdate()
-    yesterday = today - timedelta(days=1)
-
     conversation_messages = []
 
-    for message_date, messages in groupby(
-        conversation_list,
-        key=lambda message: timezone.localtime(message.created_at).date(),
-    ):
-        if message_date == today:
-            date_label = "Сьогодні"
-        elif message_date == yesterday:
-            date_label = "Вчора"
-        else:
-            date_label = date_format(message_date, "j E Y")
+    payloads = []
+    for message in conversation_list:
+        payload = build_message_payload(message).__dict__
+        payload["is_current_user"] = message.sender_id == request.user.id
+        payloads.append(payload)
 
-        day_messages = []
-
-        for message in messages:
-            created_local = timezone.localtime(message.created_at)
-            read_local = (
-                timezone.localtime(message.read_at)
-                if message.read_at
-                else None
-            )
-
-            day_messages.append(
-                {
-                    "author": message.sender.get_full_name()
-                    or message.sender.username,
-                    "text": message.text,
-                    "time_display": created_local.strftime("%H:%M"),
-                    "is_current_user": message.sender_id == request.user.id,
-                    "is_read": message.read_at is not None,
-                    "read_display": read_local.strftime("%H:%M")
-                    if read_local
-                    else None,
-                }
-            )
-
+    for message_date, messages in groupby(payloads, key=lambda item: item["date"]):
+        day_messages = list(messages)
+        date_display = day_messages[0]["date_display"] if day_messages else message_date
         conversation_messages.append(
             {
                 "date": message_date,
-                "date_display": date_label,
+                "date_display": date_display,
                 "messages": day_messages,
             }
         )
