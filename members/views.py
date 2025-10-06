@@ -452,9 +452,11 @@ def dialog_detail(request, username):
             message.sender = request.user
             message.recipient = companion
             message.save()
+            payload = build_message_payload(message).__dict__
+            payload["is_current_user"] = True
             broadcast_new_message(message)
             if is_ajax:
-                return JsonResponse({"status": "ok"})
+                return JsonResponse({"status": "ok", "message": payload})
             return redirect('dialog_detail', username=companion.username)
         if is_ajax:
             return JsonResponse(

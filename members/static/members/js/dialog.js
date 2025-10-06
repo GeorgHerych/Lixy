@@ -158,7 +158,7 @@
         listElement.scrollTop = listElement.scrollHeight;
     }
 
-    function setupForm(form) {
+    function setupForm(form, { onMessage } = {}) {
         if (!form) {
             return;
         }
@@ -223,10 +223,13 @@
 
                     throw new Error(errorMessage);
                 })
-                .then(() => {
+                .then((payload) => {
                     form.reset();
                     if (messageField instanceof HTMLTextAreaElement) {
                         messageField.value = '';
+                    }
+                    if (typeof onMessage === 'function' && payload && payload.message) {
+                        onMessage(payload.message);
                     }
                 })
                 .catch((error) => {
@@ -386,7 +389,7 @@
         }
 
         const form = document.querySelector('.dialog-form');
-        setupForm(form);
+        setupForm(form, { onMessage: handleNewMessage });
 
         scrollToBottom(messagesList);
     });
